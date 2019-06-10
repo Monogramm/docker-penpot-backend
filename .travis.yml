@@ -8,6 +8,7 @@ language: bash
 branches:
   only:
     - master
+    - develop
 
 before_script:
   - env | sort
@@ -28,5 +29,5 @@ notifications:
   email: false
 
 env: # Environments
-    - VERSION=master VARIANT=8-jre-slim
-    - VERSION=master VARIANT=8-jre
+    - VERSION=build-refactor VARIANT=8-jre-slim
+    - VERSION=build-refactor VARIANT=8-jre
