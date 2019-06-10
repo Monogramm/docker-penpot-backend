@@ -17,8 +17,8 @@ services:
       - POSTGRES_PASSWORD=uxbox_postgres_password
 
   uxbox_backend:
-    #build: ./
-    image: monogramm/docker-uxbox-backend
+    build: ./
+    #image: monogramm/docker-uxbox-backend
     container_name: uxbox_backend
     #restart: always
     depends_on:
