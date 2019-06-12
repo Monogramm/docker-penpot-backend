@@ -1,7 +1,11 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 set -e
 
-echo "UXBOX backend Docker entrypoint initialization..."
+echo "Setting up UXBOX Backend..."
 
-echo 'Running UXBOX backend'
+mkdir -p \
+    "${UXBOX_MEDIA_DIRECTORY}" \
+    "${UXBOX_ASSETS_DIRECTORY}"
+
+echo 'Running UXBOX backend...'
 exec "$@"
