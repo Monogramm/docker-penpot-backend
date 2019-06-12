@@ -54,7 +54,7 @@ RUN set -ex; \
     clojure -h
 
 # Add uxbox as provided by builder and create directories
-COPY --from=0 /home/uxbox/backend/dist/uxbox-backend.tar.gz /usr/src/uxbox
+COPY --from=0 /home/uxbox/backend/dist/uxbox-backend.tar.gz /usr/src/uxbox-backend.tar.gz
 RUN set -ex; \
     rm -rf /srv/uxbox; \
     mkdir -p /tmp/uxbox; \
