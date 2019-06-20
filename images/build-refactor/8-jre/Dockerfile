@@ -45,6 +45,7 @@ RUN set -ex; \
         curl \
         git \
         imagemagick \
+        rsync \
         webp \
     ; \
     curl -L -o clojure-linux-install.sh "https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh"; \
@@ -56,13 +57,9 @@ RUN set -ex; \
 # Add uxbox as provided by builder and create directories
 COPY --from=0 /home/uxbox/backend/dist/uxbox-backend.tar.gz /usr/src/uxbox-backend.tar.gz
 RUN set -ex; \
-    rm -rf /srv/uxbox; \
-    mkdir -p /tmp/uxbox; \
-    tar xzf /usr/src/uxbox-backend.tar.gz -C /tmp/uxbox; \
-    mkdir -p /srv; \
-    mv /tmp/uxbox/dist /srv/uxbox; \
-    rm -rf /tmp/uxbox; \
-    mkdir -p /srv/uxbox/resources/media
+    mkdir -p /usr/src/uxbox; \
+    tar xzf /usr/src/uxbox-backend.tar.gz -C /usr/src/uxbox; \
+    rm -f /usr/src/uxbox-backend.tar.gz
 
 # Add entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
