@@ -31,7 +31,7 @@ services:
     ports:
       - 6060:6060
     volumes:
-      - backend_data:/srv/uxbox/resources
+      - backend_data:/srv/uxbox/resources/public/
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     environment:
