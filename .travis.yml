@@ -29,5 +29,5 @@ notifications:
   email: false
 
 env: # Environments
-    - VERSION=build-refactor VARIANT=8-jre-slim
-    - VERSION=build-refactor VARIANT=8-jre
+    - VERSION=master VARIANT=8-jre-slim
+    - VERSION=master VARIANT=8-jre

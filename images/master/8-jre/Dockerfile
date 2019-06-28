@@ -1,6 +1,6 @@
 FROM monogramm/docker-uxbox-builder:latest
 
-ENV UXBOX_VERSION=build-refactor
+ENV UXBOX_VERSION=master
 
 # Download source from github
 ADD https://github.com/uxbox/uxbox/archive/${UXBOX_VERSION}.tar.gz /tmp/uxbox.tar.gz
@@ -30,7 +30,7 @@ RUN set -ex; \
 
 
 # Once application has been built, prepare production image
-FROM openjdk:8-jre-slim
+FROM openjdk:8-jre
 
 LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>"
 
