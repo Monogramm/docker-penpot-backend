@@ -64,7 +64,7 @@ services:
       - UXBOX_SMTP_ENABLED=false
 
   uxbox_frontend:
-    image: monogramm/uxbox:frontend:latest
+    image: monogramm/docker-uxbox-frontend:latest
     container_name: uxbox_frontend
     #hostname: uxbox.io
     #restart: always
