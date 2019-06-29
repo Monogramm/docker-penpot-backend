@@ -27,8 +27,9 @@ UXBOX is The Open-Source prototyping tool.
 
 https://hub.docker.com/r/monogramm/docker-uxbox-backend/
 
-* `8-jre-slim` `latest`
-* `8-jre`
+* `8-jre-slim` `jre-slim` `latest`
+* `8-jre` `jre`
+* `8-alpine` `alpine`
 
 ## How to run this image ?
 
@@ -51,28 +52,28 @@ $ docker run -d \
 The following environment variables are also honored for configuring your UXBOX instance:
 
 Available at runtime:
--	`-e LANG=...` (defaults to en_US.UTF-8)
--	`-e LC_ALL=...` (defaults to C.UTF-8)
--	`-e UXBOX_HTTP_SERVER_DEBUG=...` (defaults to false)
--	`-e UXBOX_MEDIA_URI=...` (defaults to http://localhost:6060/media/)
--	`-e UXBOX_MEDIA_DIRECTORY=...` (defaults to resources/public/media)
--	`-e UXBOX_ASSETS_URI=...` (defaults to http://localhost:6060/static/)
--	`-e UXBOX_ASSETS_DIRECTORY=...` (defaults to resources/public/static)
--	`-e UXBOX_DATABASE_USERNAME="..."` (defaults to uxbox)
--	`-e UXBOX_DATABASE_PASSWORD="..."` (defaults to youshouldoverwritethiswithsomethingelse)
--	`-e UXBOX_DATABASE_NAME="..."` (defaults to uxbox)
--	`-e UXBOX_DATABASE_SERVER="..."` (defaults to localhost)
--	`-e UXBOX_DATABASE_PORT=...` (defaults to 5432)
--	`-e UXBOX_EMAIL_REPLY_TO="..."` (defaults to no-reply@uxbox.io)
--	`-e UXBOX_EMAIL_FROM="..."` (defaults to no-reply@uxbox.io)
--	`-e UXBOX_SMTP_HOST="..."` (defaults to localhost)
--	`-e UXBOX_SMTP_PORT=...` (defaults to 25)
--	`-e UXBOX_SMTP_USER="..."` (defaults to uxbox)
--	`-e UXBOX_SMTP_PASSWORD="..."` (defaults to youshouldoverwritethiswithsomethingelse)
--	`-e UXBOX_SMTP_SSL=...` (defaults to false)
--	`-e UXBOX_SMTP_TLS=...` (defaults to false)
--	`-e UXBOX_SMTP_ENABLED=...` (defaults to false)
--	`-e UXBOX_SECRET="..."` (defaults to youshouldoverwritethiswithsomethingelse)
+-	`-e LANG=...` (defaults to `en_US.UTF-8`)
+-	`-e LC_ALL=...` (defaults to `C.UTF-8`)
+-	`-e UXBOX_HTTP_SERVER_DEBUG=...` (defaults to `false`)
+-	`-e UXBOX_MEDIA_URI=...` (defaults to `http://localhost:6060/media/`)
+-	`-e UXBOX_MEDIA_DIRECTORY=...` (defaults to `resources/public/media`)
+-	`-e UXBOX_ASSETS_URI=...` (defaults to `http://localhost:6060/static/`)
+-	`-e UXBOX_ASSETS_DIRECTORY=...` (defaults to `resources/public/static`)
+-	`-e UXBOX_DATABASE_USERNAME="..."` (defaults to `uxbox`)
+-	`-e UXBOX_DATABASE_PASSWORD="..."` (defaults to `youshouldoverwritethiswithsomethingelse`)
+-	`-e UXBOX_DATABASE_NAME="..."` (defaults to `uxbox`)
+-	`-e UXBOX_DATABASE_SERVER="..."` (defaults to `localhost`)
+-	`-e UXBOX_DATABASE_PORT=...` (defaults to `5432`)
+-	`-e UXBOX_EMAIL_REPLY_TO="..."` (defaults to `no-reply@uxbox.io`)
+-	`-e UXBOX_EMAIL_FROM="..."` (defaults to `no-reply@uxbox.io`)
+-	`-e UXBOX_SMTP_HOST="..."` (defaults to `localhost`)
+-	`-e UXBOX_SMTP_PORT=...` (defaults to `25`)
+-	`-e UXBOX_SMTP_USER="..."` (defaults to `uxbox`)
+-	`-e UXBOX_SMTP_PASSWORD="..."` (defaults to `youshouldoverwritethiswithsomethingelse`)
+-	`-e UXBOX_SMTP_SSL=...` (defaults to `false`)
+-	`-e UXBOX_SMTP_TLS=...` (defaults to `false`)
+-	`-e UXBOX_SMTP_ENABLED=...` (defaults to `false`)
+-	`-e UXBOX_SECRET="..."` (defaults to `5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw`)
 
 **Important note:** make sure to use quotation marks for string variables or the backend might try to interpret the values as symbols and have weird issues.
 

@@ -43,11 +43,11 @@ RUN set -ex; \
     apt-get update -yq;  \
     apt-get install -yq \
         curl \
-        git \
         imagemagick \
         rsync \
         webp \
     ; \
+	rm -rf /var/lib/apt/lists/*; \
     curl -L -o clojure-linux-install.sh "https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh"; \
     chmod +x clojure-linux-install.sh; \
     ./clojure-linux-install.sh; \
@@ -85,7 +85,7 @@ ENV UXBOX_HTTP_SERVER_DEBUG=false \
     UXBOX_SMTP_SSL=false \
     UXBOX_SMTP_TLS=false \
     UXBOX_SMTP_ENABLED=false \
-    UXBOX_SECRET=""
+    UXBOX_SECRET="5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw"
 
 WORKDIR /srv/uxbox
 
