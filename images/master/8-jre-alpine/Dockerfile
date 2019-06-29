@@ -30,7 +30,7 @@ RUN set -ex; \
 
 
 # Once application has been built, prepare production image
-FROM openjdk:8-jre
+FROM openjdk:8-jre-alpine
 
 LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>"
 
@@ -40,14 +40,13 @@ ENV CLOJURE_VERSION=1.10.0.442 \
 
 # Add dependencies needed by uxbox
 RUN set -ex; \
-    apt-get update -yq;  \
-    apt-get install -yq \
+    apk add --update  \
         curl \
         imagemagick \
         rsync \
         webp \
     ; \
-	rm -rf /var/lib/apt/lists/*; \
+	rm -rf /var/cache/apk/*; \
     curl -L -o clojure-linux-install.sh "https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh"; \
     chmod +x clojure-linux-install.sh; \
     ./clojure-linux-install.sh; \

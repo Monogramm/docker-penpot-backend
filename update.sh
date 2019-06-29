@@ -4,12 +4,14 @@ set -eo pipefail
 declare -A compose=(
 	[8-jre]='debian'
 	[8-jre-slim]='debian'
+	[8-jre-alpine]='alpine'
 	[13-alpine]='alpine'
 )
 
 declare -A base=(
 	[8-jre]='debian'
 	[8-jre-slim]='debian'
+	[8-jre-alpine]='alpine'
 	[13-alpine]='alpine'
 )
 
@@ -17,6 +19,7 @@ declare -A base=(
 variants=(
 	8-jre
 	8-jre-slim
+	8-jre-alpine
 )
 
 min_version='0.1'
