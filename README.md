@@ -76,6 +76,7 @@ Available at runtime:
 -	`-e UXBOX_SMTP_SSL=...` (defaults to `false`)
 -	`-e UXBOX_SMTP_TLS=...` (defaults to `false`)
 -	`-e UXBOX_SMTP_ENABLED=...` (defaults to `false`)
+-	`-e UXBOX_REGISTRATION_ENABLED=...` (defaults to `true`)
 -	`-e UXBOX_SECRET="..."` (defaults to `5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw`)
 
 **Important note:** make sure to use quotation marks for string variables or the backend might try to interpret the values as symbols and have weird issues.

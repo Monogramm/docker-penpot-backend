@@ -37,6 +37,7 @@ services:
     environment:
       # Security setup
       - UXBOX_SECRET="youshouldoverwritethiswithsomethingelse"
+      - UXBOX_REGISTRATION_ENABLED=true
       # HTTP setup
       - UXBOX_HTTP_SERVER_DEBUG=false
       - UXBOX_MEDIA_URI="/media/"
