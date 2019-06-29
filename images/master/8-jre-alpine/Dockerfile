@@ -43,8 +43,8 @@ RUN set -ex; \
     apk add --update  \
         curl \
         imagemagick \
+        libwebp \
         rsync \
-        webp \
     ; \
 	rm -rf /var/cache/apk/*; \
     curl -L -o clojure-linux-install.sh "https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh"; \
