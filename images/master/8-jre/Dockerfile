@@ -34,7 +34,7 @@ FROM openjdk:8-jre
 
 LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>"
 
-ENV CLOJURE_VERSION=1.10.0.442 \
+ENV CLOJURE_VERSION=1.10.1.458 \
     LANG=en_US.UTF-8 \
     LC_ALL=C.UTF-8
 
