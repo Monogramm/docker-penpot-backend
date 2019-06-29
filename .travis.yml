@@ -30,6 +30,8 @@ notifications:
 
 env: # Environments
     - VERSION=master VARIANT=13-jdk-alpine
+    - VERSION=master VARIANT=11-jdk-slim
+    - VERSION=master VARIANT=11-jdk
     - VERSION=master VARIANT=8-jre-alpine
     - VERSION=master VARIANT=8-jre-slim
     - VERSION=master VARIANT=8-jre

@@ -5,6 +5,8 @@ declare -A compose=(
 	[8-jre]='debian'
 	[8-jre-slim]='debian'
 	[8-jre-alpine]='alpine'
+	[11-jdk]='debian'
+	[11-jdk-slim]='debian'
 	[13-jdk-alpine]='alpine'
 )
 
@@ -12,6 +14,8 @@ declare -A base=(
 	[8-jre]='debian'
 	[8-jre-slim]='debian'
 	[8-jre-alpine]='alpine'
+	[11-jdk]='debian'
+	[11-jdk-slim]='debian'
 	[13-jdk-alpine]='alpine'
 )
 
@@ -20,6 +24,8 @@ variants=(
 	8-jre
 	8-jre-slim
 	8-jre-alpine
+	11-jdk
+	11-jdk-slim
 	13-jdk-alpine
 )
 
