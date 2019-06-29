@@ -41,6 +41,7 @@ ENV CLOJURE_VERSION=1.10.0.442 \
 # Add dependencies needed by uxbox
 RUN set -ex; \
     apk add --update  \
+        bash \
         curl \
         imagemagick \
         libwebp \
