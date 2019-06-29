@@ -29,7 +29,8 @@ https://hub.docker.com/r/monogramm/docker-uxbox-backend/
 
 * `8-jre-slim` `jre-slim` `latest`
 * `8-jre` `jre`
-* `8-alpine` `alpine`
+* `8-jre-alpine` `jre-alpine` `alpine`
+* `13-jdk-alpine` `jdk-alpine` `13`
 
 ## How to run this image ?
 

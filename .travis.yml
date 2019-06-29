@@ -18,7 +18,7 @@ script:
   - cd "$dir"
   - docker-compose build
   - docker images
-  - travis_retry docker-compose up -d && sleep 120
+  - travis_retry docker-compose up -d && sleep 300
   - docker-compose ps
   - docker-compose logs
   - docker-compose ps "uxbox_db" | grep "Up"
@@ -29,6 +29,7 @@ notifications:
   email: false
 
 env: # Environments
+    - VERSION=master VARIANT=13-jdk-alpine
     - VERSION=master VARIANT=8-jre-alpine
     - VERSION=master VARIANT=8-jre-slim
     - VERSION=master VARIANT=8-jre

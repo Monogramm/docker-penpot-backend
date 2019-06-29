@@ -5,14 +5,14 @@ declare -A compose=(
 	[8-jre]='debian'
 	[8-jre-slim]='debian'
 	[8-jre-alpine]='alpine'
-	[13-alpine]='alpine'
+	[13-jdk-alpine]='alpine'
 )
 
 declare -A base=(
 	[8-jre]='debian'
 	[8-jre-slim]='debian'
 	[8-jre-alpine]='alpine'
-	[13-alpine]='alpine'
+	[13-jdk-alpine]='alpine'
 )
 
 # Only debian for now, later also 13-alpine
@@ -20,6 +20,7 @@ variants=(
 	8-jre
 	8-jre-slim
 	8-jre-alpine
+	13-jdk-alpine
 )
 
 min_version='0.1'
