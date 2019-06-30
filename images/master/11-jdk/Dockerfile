@@ -15,18 +15,10 @@ RUN set -ex; \
     mv /home/uxbox/uxbox-${UXBOX_VERSION}/backend /home/uxbox/; \
     rm -rf /home/uxbox/uxbox-${UXBOX_VERSION}; \
     cd /home/uxbox/backend; \
-    rm -rf ./dist; \
-    rsync -avr \
-        --exclude="/test" \
-        --exclude="/resources/public/media" \
-        --exclude="/target" \
-        --exclude="/scripts" \
-        --exclude="/.*" \
-        ./ ./dist/; \
+    ./scripts/prepare-release.sh ./ ./dist/; \
     tar czf uxbox-backend.tar.gz ./dist; \
     rm -rf ./dist/*; \
     mv uxbox-backend.tar.gz ./dist/uxbox-backend.tar.gz
-    #./scripts/prepare-release.sh
 
 
 # Once application has been built, prepare production image
