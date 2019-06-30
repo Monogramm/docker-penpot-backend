@@ -35,6 +35,7 @@ FROM openjdk:8-jre-alpine
 LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>"
 
 ENV CLOJURE_VERSION=1.10.1.458 \
+    GLIBC_VERSION=2.29-r0 \
     LANG=en_US.UTF-8 \
     LC_ALL=C.UTF-8
 
@@ -54,7 +55,10 @@ RUN set -ex; \
     chmod +x clojure-linux-install.sh; \
     ./clojure-linux-install.sh; \
     rm -rf clojure-linux-install.sh; \
-    clojure -h
+    clojure -h; \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk; \
+    apk add --no-cache --allow-untrusted glibc-${GLIBC_VERSION}.apk; \
+    rm glibc-${GLIBC_VERSION}.apk
 
 # Add uxbox as provided by builder and create directories
 COPY --from=0 /home/uxbox/backend/dist/uxbox-backend.tar.gz /usr/src/uxbox-backend.tar.gz
