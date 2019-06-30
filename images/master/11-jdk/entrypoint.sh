@@ -13,7 +13,7 @@ mkdir -p \
 
 echo "Copying UXBOX Backend sources..."
 rsync -rlD --delete \
-    --exclude "/$(echo ${UXBOX_MEDIA_DIRECTORY} | tr -d \")" \
+    --exclude "$(echo ${UXBOX_MEDIA_DIRECTORY} | tr -d \")" \
     /usr/src/uxbox/dist/ ./
 
 echo "Copying UXBOX Backend assets..."
