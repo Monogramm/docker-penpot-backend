@@ -40,10 +40,12 @@ ENV CLOJURE_VERSION=1.10.1.458 \
 
 # Add dependencies needed by uxbox
 RUN set -ex; \
-    apk add --update  \
+    apk update; \
+    apk add --no-cache \
         bash \
         curl \
         imagemagick \
+        libc6-compat \
         libwebp \
         rsync \
     ; \
