@@ -46,7 +46,6 @@ RUN set -ex; \
         bash \
         curl \
         imagemagick \
-        libc6-compat \
         libwebp \
         rsync \
     ; \
