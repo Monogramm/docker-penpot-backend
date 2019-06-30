@@ -47,7 +47,7 @@ RUN set -ex; \
         rsync \
         webp \
     ; \
-	rm -rf /var/lib/apt/lists/*; \
+    rm -rf /var/lib/apt/lists/*; \
     curl -L -o clojure-linux-install.sh "https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh"; \
     chmod +x clojure-linux-install.sh; \
     ./clojure-linux-install.sh; \
