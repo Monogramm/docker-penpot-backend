@@ -15,18 +15,10 @@ RUN set -ex; \
     mv /home/uxbox/uxbox-${UXBOX_VERSION}/backend /home/uxbox/; \
     rm -rf /home/uxbox/uxbox-${UXBOX_VERSION}; \
     cd /home/uxbox/backend; \
-    rm -rf ./dist; \
-    rsync -avr \
-        --exclude="/test" \
-        --exclude="/resources/public/media" \
-        --exclude="/target" \
-        --exclude="/scripts" \
-        --exclude="/.*" \
-        ./ ./dist/; \
+    ./scripts/prepare-release.sh ./ ./dist/; \
     tar czf uxbox-backend.tar.gz ./dist; \
     rm -rf ./dist/*; \
     mv uxbox-backend.tar.gz ./dist/uxbox-backend.tar.gz
-    #./scripts/prepare-release.sh
 
 
 # Once application has been built, prepare production image
@@ -66,16 +58,17 @@ COPY ./entrypoint.sh /entrypoint.sh
 RUN set -ex; \
     chmod 755 /entrypoint.sh
 
-ENV UXBOX_HTTP_SERVER_DEBUG=false \
-    UXBOX_MEDIA_URI="http://localhost:6060/media/" \
-    UXBOX_MEDIA_DIRECTORY="resources/public/media" \
-    UXBOX_ASSETS_URI="http://localhost:6060/static/" \
-    UXBOX_ASSETS_DIRECTORY="resources/public/static" \
+ENV UXBOX_HTTP_SERVER_PORT=6060 \
+    UXBOX_HTTP_SERVER_DEBUG=false \
     UXBOX_DATABASE_USERNAME="uxbox" \
     UXBOX_DATABASE_PASSWORD="youshouldoverwritethiswithsomethingelse" \
     UXBOX_DATABASE_NAME="uxbox" \
     UXBOX_DATABASE_SERVER="localhost" \
     UXBOX_DATABASE_PORT=5432 \
+    UXBOX_MEDIA_DIRECTORY="resources/public/media" \
+    UXBOX_MEDIA_URI="http://localhost:6060/media/" \
+    UXBOX_ASSETS_DIRECTORY="resources/public/static" \
+    UXBOX_ASSETS_URI="http://localhost:6060/static/" \
     UXBOX_EMAIL_REPLY_TO="no-reply@uxbox.io" \
     UXBOX_EMAIL_FROM="no-reply@uxbox.io" \
     UXBOX_SMTP_HOST="localhost" \
