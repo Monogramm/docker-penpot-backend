@@ -49,7 +49,7 @@ RUN set -ex; \
         libwebp \
         rsync \
     ; \
-	rm -rf /var/cache/apk/*; \
+    rm -rf /var/cache/apk/*; \
     curl -L -o clojure-linux-install.sh "https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh"; \
     chmod +x clojure-linux-install.sh; \
     ./clojure-linux-install.sh; \
