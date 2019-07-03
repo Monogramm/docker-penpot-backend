@@ -28,6 +28,12 @@ notifications:
   email: false
 
 env: # Environments
+    - VERSION=develop VARIANT=13-jdk-alpine
+    - VERSION=develop VARIANT=11-jdk-slim
+    - VERSION=develop VARIANT=11-jdk
+    - VERSION=develop VARIANT=8-jre-alpine
+    - VERSION=develop VARIANT=8-jre-slim
+    - VERSION=develop VARIANT=8-jre
     - VERSION=master VARIANT=13-jdk-alpine
     - VERSION=master VARIANT=11-jdk-slim
     - VERSION=master VARIANT=11-jdk
