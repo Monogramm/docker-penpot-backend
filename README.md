@@ -27,12 +27,15 @@ UXBOX is The Open-Source prototyping tool.
 
 https://hub.docker.com/r/monogramm/docker-uxbox-backend/
 
-* `8-jre-slim` `jre-slim` `8` `latest`
-* `8-jre` `jre`
-* `8-jre-alpine` `jre-alpine` `alpine`
-* `11-jdk-slim` `jdk-slim` `11`
-* `11-jdk` `jdk`
-* `13-jdk-alpine` `jdk-alpine` `13`
+* Branch `master`
+    * `8-jre-slim` `jre-slim` `8` `latest`
+    * `8-jre` `jre`
+    * `8-jre-alpine` `jre-alpine` `alpine`
+    * `11-jdk-slim` `jdk-slim` `11`
+    * `11-jdk` `jdk`
+    * `13-jdk-alpine` `jdk-alpine` `13`
+* Branch `develop`
+    * `develop-8-jre-alpine` `develop-alpine` `develop`
 
 ## How to run this image ?
 
