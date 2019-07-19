@@ -65,10 +65,11 @@ RUN set -ex; \
 
 ENV UXBOX_HTTP_SERVER_PORT=6060 \
     UXBOX_HTTP_SERVER_DEBUG=false \
+    UXBOX_DATABASE_URI= \
     UXBOX_DATABASE_USERNAME="uxbox" \
     UXBOX_DATABASE_PASSWORD="youshouldoverwritethiswithsomethingelse" \
     UXBOX_DATABASE_NAME="uxbox" \
-    UXBOX_DATABASE_SERVER="localhost" \
+    UXBOX_DATABASE_SERVER="127.0.0.1" \
     UXBOX_DATABASE_PORT=5432 \
     UXBOX_MEDIA_DIRECTORY="resources/public/media" \
     UXBOX_MEDIA_URI="http://localhost:6060/media/" \
@@ -76,7 +77,7 @@ ENV UXBOX_HTTP_SERVER_PORT=6060 \
     UXBOX_ASSETS_URI="http://localhost:6060/static/" \
     UXBOX_EMAIL_REPLY_TO="no-reply@uxbox.io" \
     UXBOX_EMAIL_FROM="no-reply@uxbox.io" \
-    UXBOX_SMTP_HOST="localhost" \
+    UXBOX_SMTP_HOST="127.0.0.1" \
     UXBOX_SMTP_PORT=25 \
     UXBOX_SMTP_USER="uxbox" \
     UXBOX_SMTP_PASSWORD="youshouldoverwritethiswithsomethingelse" \
