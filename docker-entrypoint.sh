@@ -15,7 +15,7 @@ mkdir -p \
 
 if [ -z "$UXBOX_DATABASE_URI" ]; then
     log "Initializing database connection string..."
-    UXBOX_DATABASE_URI="\"jdbc:postgresql://${UXBOX_DATABASE_SERVER}:${UXBOX_DATABASE_PORT}/${UXBOX_DB_NAME}\""
+    UXBOX_DATABASE_URI="\"jdbc:postgresql://${UXBOX_DATABASE_SERVER//\"/}:${UXBOX_DATABASE_PORT}/${UXBOX_DATABASE_NAME//\"/}\""
     log "Database connection string: $UXBOX_DATABASE_URI"
 fi
 
