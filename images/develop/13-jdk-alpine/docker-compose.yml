@@ -53,6 +53,8 @@ services:
       - UXBOX_ASSETS_DIRECTORY="resources/public/static"
       - UXBOX_ASSETS_URI="/static/"
       #- UXBOX_ASSETS_URI="http://$UXBOX_WEB_DOMAIN/static/"
+      # Collections setup
+      - UXBOX_COLLECTIONS_CONFIG="/srv/media/config.edn"
       # Mail setup
       - UXBOX_EMAIL_REPLY_TO="no-reply@$UXBOX_WEB_DOMAIN"
       - UXBOX_EMAIL_FROM="no-reply@$UXBOX_WEB_DOMAIN"

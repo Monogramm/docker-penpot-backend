@@ -33,9 +33,12 @@ rsync -rlD --delete \
     /usr/src/uxbox/dist/resources/public/static "$(echo ${UXBOX_ASSETS_DIRECTORY} | tr -d \")"
 
 # ------------------------------------------------------------------------------
+# Import (new) built-in collections if any found
 
-# TODO Import (new) built-in collections if any found
-
+if [ -f "$(echo ${UXBOX_COLLECTIONS_CONFIG} | tr -d \")" ]; then
+    log "Importing collections from config ${UXBOX_COLLECTIONS_CONFIG}..."
+    clojure -Adev -m uxbox.cli.collimp $(echo ${UXBOX_COLLECTIONS_CONFIG} | tr -d \")
+fi
 
 # ------------------------------------------------------------------------------
 log "Starting UXBOX backend..."
