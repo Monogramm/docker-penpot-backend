@@ -69,6 +69,7 @@ ENV UXBOX_HTTP_SERVER_PORT=6060 \
     UXBOX_MEDIA_URI="http://localhost:6060/media/" \
     UXBOX_ASSETS_DIRECTORY="resources/public/static" \
     UXBOX_ASSETS_URI="http://localhost:6060/static/" \
+    UXBOX_COLLECTIONS_CONFIG="/srv/media/config.edn" \
     UXBOX_EMAIL_REPLY_TO="no-reply@uxbox.io" \
     UXBOX_EMAIL_FROM="no-reply@uxbox.io" \
     UXBOX_SMTP_HOST="localhost" \
