@@ -76,6 +76,7 @@ for latest in "${latests[@]}"; do
 			template="Dockerfile-${base[$variant]}.template"
 			cp "$template" "$dir/Dockerfile"
 
+			cp -r "hooks/" "$dir/"
 			cp ".dockerignore" "$dir/.dockerignore"
 			cp "docker-entrypoint.sh" "$dir/entrypoint.sh"
 			cp "docker-.env" "$dir/.env"

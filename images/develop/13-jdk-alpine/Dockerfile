@@ -1,19 +1,19 @@
 FROM monogramm/docker-uxbox-builder:latest
 
-ENV UXBOX_VERSION=develop
+ARG VERSION=develop
 
 # Download source from github
-ADD https://github.com/uxbox/uxbox/archive/${UXBOX_VERSION}.tar.gz /tmp/uxbox.tar.gz
+ADD https://github.com/uxbox/uxbox/archive/${VERSION}.tar.gz /tmp/uxbox.tar.gz
 # or copy backend from source and build release
-#COPY . /home/uxbox/uxbox-${UXBOX_VERSION}/backend
+#COPY . /home/uxbox/uxbox-${VERSION}/backend
 
 RUN set -ex; \
     mkdir -p /home/uxbox; \
     cd /home/uxbox; \
     tar -xzf /tmp/uxbox.tar.gz; \
     rm -f /tmp/uxbox.tar.gz; \
-    mv /home/uxbox/uxbox-${UXBOX_VERSION}/backend /home/uxbox/; \
-    rm -rf /home/uxbox/uxbox-${UXBOX_VERSION}; \
+    mv /home/uxbox/uxbox-${VERSION}/backend /home/uxbox/; \
+    rm -rf /home/uxbox/uxbox-${VERSION}; \
     cd /home/uxbox/backend; \
     ./scripts/prepare-release.sh ./ ./dist/; \
     tar czf uxbox-backend.tar.gz ./dist; \
@@ -24,7 +24,21 @@ RUN set -ex; \
 # Once application has been built, prepare production image
 FROM openjdk:13-jdk-alpine
 
-LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>"
+ARG VERSION=develop
+ARG VCS_REF
+ARG BUILD_DATE
+
+LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
+    version=$VERSION \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.vcs-url="https://github.com/Monogramm/docker-uxbox-backend" \
+    org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.name="UXBOX (backend) - The Open-Source prototyping tool" \
+    org.label-schema.description="The open-source solution for design and prototyping" \
+    org.label-schema.url="https://www.uxbox.io/" \
+    org.label-schema.vendor="UXBOX" \
+    org.label-schema.version=$VERSION \
+    org.label-schema.schema-version="1.0"
 
 ENV CLOJURE_VERSION=1.10.1.458 \
     GLIBC_VERSION=2.29-r0 \
