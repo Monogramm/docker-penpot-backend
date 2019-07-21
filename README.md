@@ -35,7 +35,7 @@ https://hub.docker.com/r/monogramm/docker-uxbox-backend/
     * `11-jdk` `jdk`
     * `13-jdk-alpine` `jdk-alpine` `13`
 * Branch `develop`
-    * `develop-8-jre-alpine` `develop-alpine` `develop`
+    * `develop`
 
 ## How to run this image ?
 
