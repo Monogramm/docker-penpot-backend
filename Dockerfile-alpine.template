@@ -67,7 +67,7 @@ RUN set -ex; \
 
 # Add uxbox as provided by builder and create directories
 COPY --from=0 /home/uxbox/backend/dist/uxbox-backend.tar.gz /usr/src/uxbox-backend.tar.gz
-COPY --from=0 /home/uxbox/media /usr/src/media
+COPY --from=0 /home/uxbox/sample_media /usr/src/media
 RUN set -ex; \
     mkdir -p /usr/src/uxbox; \
     tar xzf /usr/src/uxbox-backend.tar.gz -C /usr/src/uxbox; \
