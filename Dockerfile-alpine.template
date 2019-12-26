@@ -18,7 +18,8 @@ RUN set -ex; \
     ./scripts/prepare-release.sh ./ ./dist/; \
     tar czf uxbox-backend.tar.gz ./dist; \
     rm -rf ./dist/*; \
-    mv uxbox-backend.tar.gz ./dist/uxbox-backend.tar.gz
+    mv uxbox-backend.tar.gz ./dist/uxbox-backend.tar.gz; \
+    ls -al /home/uxbox/
 
 
 # Once application has been built, prepare production image
