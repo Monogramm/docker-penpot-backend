@@ -19,9 +19,11 @@ script:
   - docker images
   - travis_retry docker-compose up -d && sleep 300
   - docker-compose ps
-  - docker-compose logs
+  - docker-compose logs "uxbox_db"
   - docker-compose ps "uxbox_db" | grep "Up"
+  - docker-compose logs "uxbox_backend"
   - docker-compose ps "uxbox_backend" | grep "Up"
+  - docker-compose logs "uxbox_frontend"
   #- docker-compose ps "uxbox_frontend" | grep "Up"
 
 notifications:

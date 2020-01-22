@@ -13,6 +13,8 @@ RUN set -ex; \
     tar -xzf /tmp/uxbox.tar.gz; \
     rm -f /tmp/uxbox.tar.gz; \
     mv /home/uxbox/uxbox-${VERSION}/backend /home/uxbox/; \
+    [ ! -f /home/uxbox/uxbox-${VERSION}/sample_media ] || mv /home/uxbox/uxbox-${VERSION}/sample_media /home/uxbox/; \
+    mkdir -p /home/uxbox/sample_media; \
     rm -rf /home/uxbox/uxbox-${VERSION}; \
     cd /home/uxbox/backend; \
     ./scripts/prepare-release.sh ./ ./dist/; \
@@ -23,22 +25,6 @@ RUN set -ex; \
 
 # Once application has been built, prepare production image
 FROM openjdk:13-jdk-alpine
-
-ARG VERSION=develop
-ARG VCS_REF
-ARG BUILD_DATE
-
-LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
-    version=$VERSION \
-    org.label-schema.vcs-ref=$VCS_REF \
-    org.label-schema.vcs-url="https://github.com/Monogramm/docker-uxbox-backend" \
-    org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.name="UXBOX (backend) - The Open-Source prototyping tool" \
-    org.label-schema.description="The open-source solution for design and prototyping" \
-    org.label-schema.url="https://www.uxbox.io/" \
-    org.label-schema.vendor="UXBOX" \
-    org.label-schema.version=$VERSION \
-    org.label-schema.schema-version="1.0"
 
 ENV CLOJURE_VERSION=1.10.1.458 \
     GLIBC_VERSION=2.29-r0 \
@@ -108,6 +94,22 @@ WORKDIR /srv/uxbox
 VOLUME /srv/uxbox/resources/public
 
 EXPOSE 6060
+
+ARG VERSION=develop
+ARG VCS_REF
+ARG BUILD_DATE
+
+LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
+    version=$VERSION \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.vcs-url="https://github.com/Monogramm/docker-uxbox-backend" \
+    org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.name="UXBOX (backend) - The Open-Source prototyping tool" \
+    org.label-schema.description="The open-source solution for design and prototyping" \
+    org.label-schema.url="https://www.uxbox.io/" \
+    org.label-schema.vendor="UXBOX" \
+    org.label-schema.version=$VERSION \
+    org.label-schema.schema-version="1.0"
 
 ENTRYPOINT ["sh", "/entrypoint.sh"]
 CMD ["clojure", "-m", "uxbox.main"]
