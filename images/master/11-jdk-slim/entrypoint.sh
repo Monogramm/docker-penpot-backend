@@ -42,9 +42,15 @@ rsync -rlD \
 # ------------------------------------------------------------------------------
 # Import (new) built-in collections if any found
 
-if [ -f "$(echo ${UXBOX_COLLECTIONS_CONFIG} | tr -d \")" ]; then
-    log "Importing collections from config ${UXBOX_COLLECTIONS_CONFIG}..."
-    clojure -Adev -m uxbox.cli.collimp $(echo ${UXBOX_COLLECTIONS_CONFIG} | tr -d \")
+if [ -n "${UXBOX_COLLECTIONS_CONFIG}" ]; then
+    TEMP_UXBOX_COLLECTIONS_CONFIG=$(echo ${UXBOX_COLLECTIONS_CONFIG} | tr -d \")
+
+    if [ -f "${TEMP_UXBOX_COLLECTIONS_CONFIG}" ] && [ ! -f "${TEMP_UXBOX_COLLECTIONS_CONFIG}.loaded" ]; then
+        log "Importing collections from config ${UXBOX_COLLECTIONS_CONFIG}..."
+        clojure -Adev -m uxbox.cli.collimp "${TEMP_UXBOX_COLLECTIONS_CONFIG}"
+    fi
+
+    TEMP_UXBOX_COLLECTIONS_CONFIG=
 fi
 
 # ------------------------------------------------------------------------------
