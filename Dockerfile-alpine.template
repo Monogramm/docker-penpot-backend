@@ -14,8 +14,9 @@ RUN set -ex; \
     rm -f /tmp/uxbox.tar.gz; \
     mv /home/uxbox/uxbox-${VERSION}/backend /home/uxbox/; \
     [ ! -d /home/uxbox/uxbox-${VERSION}/sample_media ] || mv /home/uxbox/uxbox-${VERSION}/sample_media /home/uxbox/; \
-    [ ! -d /home/uxbox/uxbox-${VERSION}/common ] || mv /home/uxbox/uxbox-${VERSION}/common /home/uxbox/backend/src/uxbox/; \
     mkdir -p /home/uxbox/sample_media; \
+    [ ! -d /home/uxbox/uxbox-${VERSION}/common ] || mv /home/uxbox/uxbox-${VERSION}/common /home/uxbox/backend/src/uxbox/; \
+    mkdir -p /home/uxbox/backend/src/uxbox/; \
     rm -rf /home/uxbox/uxbox-${VERSION}; \
     cd /home/uxbox/backend; \
     ./scripts/prepare-release.sh ./ ./dist/; \
@@ -55,7 +56,7 @@ RUN set -ex; \
 # Add uxbox as provided by builder and create directories
 COPY --from=0 /home/uxbox/backend/dist/uxbox-backend.tar.gz /usr/src/uxbox-backend.tar.gz
 COPY --from=0 /home/uxbox/sample_media /usr/src/media
-COPY --from=0 /home/uxbox/common /usr/src/common
+COPY --from=0 /home/uxbox/backend/src/uxbox/common /usr/src/common
 RUN set -ex; \
     mkdir -p /usr/src/uxbox; \
     tar xzf /usr/src/uxbox-backend.tar.gz -C /usr/src/uxbox; \
