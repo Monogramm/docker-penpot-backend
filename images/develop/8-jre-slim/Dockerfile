@@ -59,7 +59,8 @@ COPY ./entrypoint.sh /entrypoint.sh
 RUN set -ex; \
     chmod 755 /entrypoint.sh
 
-ENV UXBOX_HTTP_SERVER_PORT=6060 \
+ENV CLOJURE_OPTS=-J-XX:-OmitStackTraceInFastThrow \
+    UXBOX_HTTP_SERVER_PORT=6060 \
     UXBOX_HTTP_SERVER_DEBUG=false \
     UXBOX_DATABASE_URI= \
     UXBOX_DATABASE_USERNAME="uxbox" \
@@ -107,4 +108,4 @@ LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     org.label-schema.schema-version="1.0"
 
 ENTRYPOINT ["sh", "/entrypoint.sh"]
-CMD ["clojure", "-m", "uxbox.main"]
+CMD ["clojure", "${CLOJURE_OPTIONS}", "-m", "uxbox.main"]
