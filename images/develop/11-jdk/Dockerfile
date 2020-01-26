@@ -16,7 +16,7 @@ RUN set -ex; \
     [ ! -d /home/uxbox/uxbox-${VERSION}/sample_media ] || mv /home/uxbox/uxbox-${VERSION}/sample_media /home/uxbox/; \
     mkdir -p /home/uxbox/sample_media; \
     [ ! -d /home/uxbox/uxbox-${VERSION}/common ] || mv /home/uxbox/uxbox-${VERSION}/common /home/uxbox/backend/src/uxbox/; \
-    mkdir -p /home/uxbox/backend/src/uxbox/; \
+    mkdir -p /home/uxbox/backend/src/uxbox/common; \
     rm -rf /home/uxbox/uxbox-${VERSION}; \
     cd /home/uxbox/backend; \
     ./scripts/prepare-release.sh ./ ./dist/; \
