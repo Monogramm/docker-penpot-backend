@@ -15,14 +15,14 @@ RUN set -ex; \
     mv /home/uxbox/uxbox-${VERSION}/backend /home/uxbox/; \
     [ ! -d /home/uxbox/uxbox-${VERSION}/sample_media ] || mv /home/uxbox/uxbox-${VERSION}/sample_media /home/uxbox/; \
     mkdir -p /home/uxbox/sample_media; \
-    [ ! -d /home/uxbox/uxbox-${VERSION}/common ] || mv /home/uxbox/uxbox-${VERSION}/common /home/uxbox/; \
-    mkdir -p /home/uxbox/common; \
     rm -rf /home/uxbox/uxbox-${VERSION}; \
     cd /home/uxbox/backend; \
-    ./scripts/prepare-release.sh ./ ./dist/; \
-    tar czf uxbox-backend.tar.gz ./dist; \
-    rm -rf ./dist/*; \
-    mv uxbox-backend.tar.gz ./dist/uxbox-backend.tar.gz
+    ./scripts/prepare-release.sh ./ ./target/dist/; \
+    [ ! -d /home/uxbox/uxbox-${VERSION}/common ] || mv /home/uxbox/uxbox-${VERSION}/common /home/uxbox/backend/target/dist/; \
+    mkdir -p /home/uxbox/backend/target/dist/common; \
+    tar czf uxbox-backend.tar.gz ./target/dist; \
+    rm -rf ./target/dist/*; \
+    mv uxbox-backend.tar.gz ./target/dist/uxbox-backend.tar.gz
 
 
 # Once application has been built, prepare production image
@@ -56,7 +56,6 @@ RUN set -ex; \
 # Add uxbox as provided by builder and create directories
 COPY --from=0 /home/uxbox/backend/dist/uxbox-backend.tar.gz /usr/src/uxbox-backend.tar.gz
 COPY --from=0 /home/uxbox/sample_media /usr/src/media
-COPY --from=0 /home/uxbox/common /usr/src/common
 RUN set -ex; \
     mkdir -p /usr/src/uxbox; \
     tar xzf /usr/src/uxbox-backend.tar.gz -C /usr/src/uxbox; \
