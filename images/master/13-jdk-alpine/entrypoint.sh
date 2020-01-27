@@ -26,12 +26,12 @@ fi
 log "Copying UXBOX Backend sources..."
 rsync -rlD --delete \
     --exclude "$(echo ${UXBOX_MEDIA_DIRECTORY} | tr -d \")" \
-    /usr/src/uxbox/dist/ \
+    /usr/src/uxbox/target/dist/ \
     ./
 
 log "Copying UXBOX Backend assets..."
 rsync -rlD --delete \
-    /usr/src/uxbox/dist/resources/public/static \
+    /usr/src/uxbox/target/dist/resources/public/static \
     "$(echo ${UXBOX_ASSETS_DIRECTORY} | tr -d \")"
 
 log "Copying UXBOX default media..."
@@ -48,6 +48,9 @@ if [ -n "${UXBOX_COLLECTIONS_CONFIG}" ]; then
     if [ -f "${TEMP_UXBOX_COLLECTIONS_CONFIG}" ] && [ ! -f "${TEMP_UXBOX_COLLECTIONS_CONFIG}.loaded" ]; then
         log "Importing collections from config ${UXBOX_COLLECTIONS_CONFIG}..."
         clojure -Adev -m uxbox.cli.collimp "${TEMP_UXBOX_COLLECTIONS_CONFIG}"
+        touch "${TEMP_UXBOX_COLLECTIONS_CONFIG}.loaded"
+    else
+        log "Collections from config ${UXBOX_COLLECTIONS_CONFIG} already imported."
     fi
 
     TEMP_UXBOX_COLLECTIONS_CONFIG=

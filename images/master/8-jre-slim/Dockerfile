@@ -89,7 +89,7 @@ ENV UXBOX_HTTP_SERVER_PORT=6060 \
 
 WORKDIR /srv/uxbox
 
-VOLUME /srv/uxbox/resources/public
+VOLUME [ "/srv/uxbox/resources/public", "/srv/media" ]
 
 EXPOSE 6060
 
