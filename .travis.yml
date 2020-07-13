@@ -42,19 +42,19 @@ notifications:
   email: false
 
 env: # Environments
-    - VERSION=develop VARIANT=openjdk-11-tools-deps-slim-buster
-    - VERSION=develop VARIANT=openjdk-11-tools-deps-buster
-    - VERSION=develop VARIANT=openjdk-14-tools-deps-slim-buster
-    - VERSION=develop VARIANT=openjdk-14-tools-deps-buster
-    - VERSION=develop VARIANT=openjdk-14-tools-deps-alpine
-    - VERSION=develop VARIANT=openjdk-15-tools-deps-slim-buster
-    - VERSION=develop VARIANT=openjdk-15-tools-deps-buster
     - VERSION=develop VARIANT=openjdk-15-tools-deps-alpine
-    - VERSION=master VARIANT=openjdk-11-tools-deps-slim-buster
-    - VERSION=master VARIANT=openjdk-11-tools-deps-buster
-    - VERSION=master VARIANT=openjdk-14-tools-deps-slim-buster
-    - VERSION=master VARIANT=openjdk-14-tools-deps-buster
-    - VERSION=master VARIANT=openjdk-14-tools-deps-alpine
-    - VERSION=master VARIANT=openjdk-15-tools-deps-slim-buster
-    - VERSION=master VARIANT=openjdk-15-tools-deps-buster
+    - VERSION=develop VARIANT=openjdk-15-tools-deps-buster
+    - VERSION=develop VARIANT=openjdk-15-tools-deps-slim-buster
+    - VERSION=develop VARIANT=openjdk-14-tools-deps-alpine
+    - VERSION=develop VARIANT=openjdk-14-tools-deps-buster
+    - VERSION=develop VARIANT=openjdk-14-tools-deps-slim-buster
+    - VERSION=develop VARIANT=openjdk-11-tools-deps-buster
+    - VERSION=develop VARIANT=openjdk-11-tools-deps-slim-buster
     - VERSION=master VARIANT=openjdk-15-tools-deps-alpine
+    - VERSION=master VARIANT=openjdk-15-tools-deps-buster
+    - VERSION=master VARIANT=openjdk-15-tools-deps-slim-buster
+    - VERSION=master VARIANT=openjdk-14-tools-deps-alpine
+    - VERSION=master VARIANT=openjdk-14-tools-deps-buster
+    - VERSION=master VARIANT=openjdk-14-tools-deps-slim-buster
+    - VERSION=master VARIANT=openjdk-11-tools-deps-buster
+    - VERSION=master VARIANT=openjdk-11-tools-deps-slim-buster
