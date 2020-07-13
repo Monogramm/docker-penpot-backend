@@ -2,31 +2,37 @@
 set -eo pipefail
 
 declare -A compose=(
-	[8-jre]='debian'
-	[8-jre-slim]='debian'
-	[8-jre-alpine]='alpine'
-	[11-jdk]='debian'
-	[11-jdk-slim]='debian'
-	[13-jdk-alpine]='alpine'
+	[openjdk-11-tools-deps-slim-buster]='debian'
+	[openjdk-11-tools-deps-buster]='debian'
+	[openjdk-14-tools-deps-slim-buster]='debian'
+	[openjdk-14-tools-deps-buster]='debian'
+	[openjdk-14-tools-deps-alpine]='alpine'
+	[openjdk-15-tools-deps-slim-buster]='debian'
+	[openjdk-15-tools-deps-buster]='debian'
+	[openjdk-15-tools-deps-alpine]='alpine'
 )
 
 declare -A base=(
-	[8-jre]='debian'
-	[8-jre-slim]='debian'
-	[8-jre-alpine]='alpine'
-	[11-jdk]='debian'
-	[11-jdk-slim]='debian'
-	[13-jdk-alpine]='alpine'
+	[openjdk-11-tools-deps-slim-buster]='debian'
+	[openjdk-11-tools-deps-buster]='debian'
+	[openjdk-14-tools-deps-slim-buster]='debian'
+	[openjdk-14-tools-deps-buster]='debian'
+	[openjdk-14-tools-deps-alpine]='alpine'
+	[openjdk-15-tools-deps-slim-buster]='debian'
+	[openjdk-15-tools-deps-buster]='debian'
+	[openjdk-15-tools-deps-alpine]='alpine'
 )
 
 # Only debian for now, later also 13-alpine
 variants=(
-	8-jre
-	8-jre-slim
-	8-jre-alpine
-	11-jdk
-	11-jdk-slim
-	13-jdk-alpine
+	openjdk-11-tools-deps-slim-buster
+	openjdk-11-tools-deps-buster
+	openjdk-14-tools-deps-slim-buster
+	openjdk-14-tools-deps-buster
+	openjdk-14-tools-deps-alpine
+	openjdk-15-tools-deps-slim-buster
+	openjdk-15-tools-deps-buster
+	openjdk-15-tools-deps-alpine
 )
 
 min_version='0.1'
@@ -93,7 +99,7 @@ for latest in "${latests[@]}"; do
 			if [[ $1 == 'build' ]]; then
 				tag="$version-$variant"
 				echo "Build Dockerfile for ${tag}"
-				docker build -t ${dockerRepo}:${tag} $dir
+				docker build -t ${dockerRepo}:"${tag}" "$dir"
 			fi
 		done
 	fi

@@ -1,6 +1,6 @@
 FROM monogramm/docker-uxbox-builder:latest as builder
 
-ARG VERSION=%%VERSION%%
+ARG VERSION=master
 
 # Download source from github
 ADD https://github.com/uxbox/uxbox/archive/${VERSION}.tar.gz /tmp/uxbox.tar.gz
@@ -27,7 +27,7 @@ RUN set -ex; \
 
 
 # Once application has been built, prepare production image
-FROM clojure:%%VARIANT%%
+FROM clojure:openjdk-14-tools-deps-slim-buster
 
 ENV LANG=en_US.UTF-8 \
     LC_ALL=C.UTF-8
@@ -87,7 +87,7 @@ VOLUME [ "/srv/uxbox/resources/public", "/srv/media" ]
 
 EXPOSE 6060
 
-ARG VERSION=%%VERSION%%
+ARG VERSION=master
 ARG VCS_REF
 ARG BUILD_DATE
 
