@@ -13,6 +13,7 @@ RUN set -ex; \
     tar -xzf /tmp/uxbox.tar.gz; \
     rm -f /tmp/uxbox.tar.gz; \
     mv /home/uxbox/uxbox-${VERSION}/backend /home/uxbox/; \
+    [ ! -d /home/uxbox/uxbox-${VERSION}/common ] || mv /home/uxbox/uxbox-${VERSION}/common /home/uxbox/; \
     [ ! -d /home/uxbox/uxbox-${VERSION}/sample_media ] || mv /home/uxbox/uxbox-${VERSION}/sample_media /home/uxbox/; \
     mkdir -p /home/uxbox/sample_media; \
     rm -rf /home/uxbox/uxbox-${VERSION}; \

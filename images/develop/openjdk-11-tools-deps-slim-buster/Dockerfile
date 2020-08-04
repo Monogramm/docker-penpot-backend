@@ -1,4 +1,4 @@
-FROM monogramm/docker-uxbox-builder:develop as builder
+FROM monogramm/docker-uxbox-builder:latest as builder
 
 ARG VERSION=develop
 
