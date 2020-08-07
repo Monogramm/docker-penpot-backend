@@ -83,8 +83,8 @@ for latest in "${latests[@]}"; do
 
 			cp -r "template/hooks/" "$dir/"
 			cp "template/.dockerignore" "$dir/.dockerignore"
-			cp "template/docker-entrypoint.sh" "$dir/entrypoint.sh"
-			cp "template/docker-.env" "$dir/.env"
+			cp "template/entrypoint.sh" "$dir/entrypoint.sh"
+			cp "template/.env" "$dir/.env"
 			cp "template/docker-compose_${compose[$variant]}.yml" "$dir/docker-compose.yml"
 
 			# Replace the variables.
