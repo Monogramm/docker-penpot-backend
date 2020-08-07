@@ -82,6 +82,7 @@ for latest in "${latests[@]}"; do
 			cp "template/$template" "$dir/Dockerfile"
 
 			cp -r "template/hooks/" "$dir/"
+			cp -r "template/test/" "$dir/"
 			cp "template/.dockerignore" "$dir/.dockerignore"
 			cp "template/entrypoint.sh" "$dir/entrypoint.sh"
 			cp "template/.env" "$dir/.env"
