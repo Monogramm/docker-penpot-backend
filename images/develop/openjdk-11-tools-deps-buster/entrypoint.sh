@@ -57,5 +57,19 @@ if [ -n "${UXBOX_COLLECTIONS_CONFIG}" ]; then
 fi
 
 # ------------------------------------------------------------------------------
+# Generate demo data
+
+if [ -n "${UXBOX_DEMO_DATA}" ]; then
+    if [ ! -e ~/.fixtures-loaded ]; then
+        log "Loading fixtures..."
+        clojure -Adev -m uxbox.fixtures
+        touch ~/.fixtures-loaded
+        log "Loaded fixtures."
+    else
+        log "Fixtures already loaded."
+    fi
+fi
+
+# ------------------------------------------------------------------------------
 log "Starting UXBOX backend..."
 exec "$@"
