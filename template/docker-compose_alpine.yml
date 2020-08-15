@@ -6,6 +6,11 @@ volumes:
   backend_m2:
   frontend_data:
 
+networks:
+  uxbox_external_network:
+  uxbox_internal_network:
+    internal: true
+
 services:
   # https://docs.docker.com/docker-hub/builds/automated-testing/
   sut:
@@ -13,6 +18,8 @@ services:
       context: ./test
       dockerfile: Dockerfile
     command: sh /docker_test.sh
+    networks:
+      - uxbox_internal_network
     depends_on:
       - uxbox_db
       - uxbox_mailer
@@ -34,8 +41,12 @@ services:
     stop_signal: SIGINT
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${UXBOX_DB_LOGIN}", "-d", "${UXBOX_DB_NAME}"]
-    ports:
-      - "5432:5432"
+    networks:
+      - uxbox_internal_network
+    expose:
+      - 5432
+    #ports:
+    #  - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
@@ -51,6 +62,8 @@ services:
     hostname: uxbox_mailer
     container_name: uxbox_mailer
     restart: always
+    networks:
+      - uxbox_internal_network
     expose:
       - 1025
     ports:
@@ -71,12 +84,20 @@ services:
         condition: service_started
       uxbox_redis:
         condition: service_healthy
-    ports:
-      - "3447:3447"
-      - "3448:3448"
-      - "3449:3449"
-      - "6060:6060"
-      - "9090:9090"
+    networks:
+      - uxbox_internal_network
+    expose:
+      - 3447
+      - 3448
+      - 3449
+      - 6060
+      - 9090
+    #ports:
+    #  - "3447:3447"
+    #  - "3448:3448"
+    #  - "3449:3449"
+    #  - "6060:6060"
+    #  - "9090:9090"
     volumes:
       - backend_data:/srv/uxbox/resources/public/
       - backend_m2:/root/.m2
@@ -127,8 +148,12 @@ services:
     hostname: $UXBOX_WEB_DOMAIN
     container_name: uxbox_redis
     restart: always
-    ports:
-      - 6379:6379
+    networks:
+      - uxbox_internal_network
+    expose:
+      - 6379
+    #ports:
+    #  - "6379:6379"
 
   uxbox_frontend:
     image: monogramm/docker-uxbox-frontend:develop
@@ -137,6 +162,11 @@ services:
     #restart: always
     depends_on:
       - uxbox_backend
+    networks:
+      - uxbox_internal_network
+      - uxbox_external_network
+    expose:
+      - 80
     ports:
       - 80:80
     volumes:
