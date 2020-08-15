@@ -10,21 +10,14 @@ ADD https://github.com/uxbox/uxbox/archive/${VERSION}.tar.gz /tmp/uxbox.tar.gz
 RUN set -ex; \
     mkdir -p /home/uxbox; \
     cd /home/uxbox; \
-    tar -xzf /tmp/uxbox.tar.gz; \
-    rm -f /tmp/uxbox.tar.gz; \
-    mv /home/uxbox/uxbox-${VERSION}/backend /home/uxbox/; \
-    [ ! -d /home/uxbox/uxbox-${VERSION}/common ] || mv /home/uxbox/uxbox-${VERSION}/common /home/uxbox/; \
-    [ ! -d /home/uxbox/uxbox-${VERSION}/sample_media ] || mv /home/uxbox/uxbox-${VERSION}/sample_media /home/uxbox/; \
-    mkdir -p /home/uxbox/sample_media; \
-    rm -rf /home/uxbox/uxbox-${VERSION}; \
-    cd /home/uxbox/backend; \
-    mkdir ./target; \
-    ./scripts/prepare-release.sh ./ ./target/dist/; \
-    [ ! -d /home/uxbox/uxbox-${VERSION}/common ] || mv /home/uxbox/uxbox-${VERSION}/common /home/uxbox/backend/target/dist/; \
-    mkdir -p /home/uxbox/backend/target/dist/common; \
-    tar czf uxbox-backend.tar.gz ./target/dist; \
-    rm -rf ./target/dist/*; \
-    mv uxbox-backend.tar.gz ./target/dist/uxbox-backend.tar.gz
+    tar -xzf /tmp/uxbox.tar.gz --strip=1; \
+    rm -f /tmp/uxbox.tar.gz;
+
+
+WORKDIR /home/uxbox/backend
+
+# Fetch dependencies (cache them on this step)
+RUN clojure -Stree;
 
 
 # Once application has been built, prepare production image
@@ -44,18 +37,28 @@ RUN set -ex; \
     ; \
     rm -rf /var/lib/apt/lists/*
 
-# Add uxbox as provided by builder and create directories
-COPY --from=builder /home/uxbox/backend/target/dist/uxbox-backend.tar.gz /usr/src/uxbox-backend.tar.gz
-COPY --from=builder /home/uxbox/sample_media /usr/src/media
+
+ARG EXTERNAL_UID=1000
+
+# add new user
 RUN set -ex; \
-    mkdir -p /usr/src/uxbox; \
-    tar xzf /usr/src/uxbox-backend.tar.gz -C /usr/src/uxbox; \
-    rm -f /usr/src/uxbox-backend.tar.gz
+    adduser \
+    --disabled-password \
+    -u $EXTERNAL_UID \
+    -D uxbox; \
+    echo "uxbox ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/uxbox; \
+    chmod 0440 /etc/sudoers.d/uxbox
+
+USER uxbox
+
+# Add uxbox as provided by builder and create directories
+COPY --chown=uxbox:uxbox --from=builder /root/.m2 ~/.m2
+COPY --chown=uxbox:uxbox --from=builder /home/uxbox /home/uxbox
 
 # Add entrypoint
-COPY ./entrypoint.sh /entrypoint.sh
-RUN set -ex; \
-    chmod 755 /entrypoint.sh
+COPY --chown=uxbox:uxbox ./entrypoint.sh /entrypoint.sh
+
+RUN chmod 755 /entrypoint.sh
 
 ENV UXBOX_HTTP_SERVER_PORT=6060 \
     UXBOX_HTTP_SERVER_DEBUG=false \
@@ -82,9 +85,9 @@ ENV UXBOX_HTTP_SERVER_PORT=6060 \
     UXBOX_REGISTRATION_ENABLED=true \
     UXBOX_SECRET="5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw"
 
-WORKDIR /srv/uxbox
+WORKDIR /home/uxbox/backend
 
-VOLUME [ "/srv/uxbox/resources/public", "/srv/media" ]
+VOLUME [ "/home/uxbox/resources/public", "/srv/media" ]
 
 EXPOSE 6060
 
@@ -105,4 +108,4 @@ LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     org.label-schema.schema-version="1.0"
 
 ENTRYPOINT ["sh", "/entrypoint.sh"]
-CMD ["clojure", "-m", "uxbox.main"]
+CMD ["./bin/start-prod"]
