@@ -131,7 +131,7 @@ services:
       - 6379:6379
 
   uxbox_frontend:
-    image: monogramm/docker-uxbox-frontend:latest
+    image: monogramm/docker-uxbox-frontend:develop
     container_name: uxbox_frontend
     hostname: $UXBOX_WEB_DOMAIN
     #restart: always
