@@ -62,6 +62,7 @@ RUN chmod 755 /entrypoint.sh
 
 ENV UXBOX_HTTP_SERVER_PORT=6060 \
     UXBOX_HTTP_SERVER_DEBUG=false \
+    UXBOX_PUBLIC_URI=http://localhost/ \
     UXBOX_DATABASE_URI= \
     UXBOX_DATABASE_USERNAME="uxbox" \
     UXBOX_DATABASE_PASSWORD="youshouldoverwritethiswithsomethingelse" \

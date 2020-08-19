@@ -83,7 +83,7 @@ services:
       uxbox_mailer:
         condition: service_started
       uxbox_redis:
-        condition: service_healthy
+        condition: service_started
     networks:
       - uxbox_internal_network
     expose:
