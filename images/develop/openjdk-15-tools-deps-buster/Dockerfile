@@ -1,20 +1,20 @@
-FROM monogramm/docker-uxbox-builder:develop as builder
+FROM monogramm/docker-penpot-builder:develop as builder
 
 ARG VERSION=develop
 
 # Download source from github
-ADD https://github.com/uxbox/uxbox/archive/${VERSION}.tar.gz /tmp/uxbox.tar.gz
+ADD https://github.com/penpot/penpot/archive/${VERSION}.tar.gz /tmp/penpot.tar.gz
 # or copy backend from source and build release
-#COPY . /home/uxbox/uxbox-${VERSION}/backend
+#COPY . /home/penpot/penpot-${VERSION}/backend
 
 RUN set -ex; \
-    mkdir -p /home/uxbox; \
-    cd /home/uxbox; \
-    tar -xzf /tmp/uxbox.tar.gz --strip=1; \
-    rm -f /tmp/uxbox.tar.gz;
+    mkdir -p /home/penpot; \
+    cd /home/penpot; \
+    tar -xzf /tmp/penpot.tar.gz --strip=1; \
+    rm -f /tmp/penpot.tar.gz;
 
 
-WORKDIR /home/uxbox/backend
+WORKDIR /home/penpot/backend
 
 # Fetch dependencies (cache them on this step)
 RUN clojure -Stree;
@@ -26,7 +26,7 @@ FROM clojure:openjdk-15-tools-deps-buster
 ENV LANG=en_US.UTF-8 \
     LC_ALL=C.UTF-8
 
-# Add dependencies needed by uxbox
+# Add dependencies needed by penpot
 RUN set -ex; \
     apt-get update -yq;  \
     apt-get install -yq \
@@ -45,50 +45,50 @@ RUN set -ex; \
     adduser \
     --disabled-password \
     -u $EXTERNAL_UID \
-    -D uxbox; \
-    echo "uxbox ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/uxbox; \
-    chmod 0440 /etc/sudoers.d/uxbox
+    -D penpot; \
+    echo "penpot ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/penpot; \
+    chmod 0440 /etc/sudoers.d/penpot
 
-USER uxbox
+USER penpot
 
-# Add uxbox as provided by builder and create directories
-COPY --chown=uxbox:uxbox --from=builder /root/.m2 ~/.m2
-COPY --chown=uxbox:uxbox --from=builder /home/uxbox /home/uxbox
+# Add penpot as provided by builder and create directories
+COPY --chown=penpot:penpot --from=builder /root/.m2 ~/.m2
+COPY --chown=penpot:penpot --from=builder /home/penpot /home/penpot
 
 # Add entrypoint
-COPY --chown=uxbox:uxbox ./entrypoint.sh /entrypoint.sh
+COPY --chown=penpot:penpot ./entrypoint.sh /entrypoint.sh
 
 RUN chmod 755 /entrypoint.sh
 
-ENV UXBOX_HTTP_SERVER_PORT=6060 \
-    UXBOX_HTTP_SERVER_DEBUG=false \
-    UXBOX_PUBLIC_URI=http://localhost/ \
-    UXBOX_DATABASE_URI= \
-    UXBOX_DATABASE_USERNAME="uxbox" \
-    UXBOX_DATABASE_PASSWORD="youshouldoverwritethiswithsomethingelse" \
-    UXBOX_DATABASE_NAME="uxbox" \
-    UXBOX_DATABASE_SERVER="127.0.0.1" \
-    UXBOX_DATABASE_PORT=5432 \
-    UXBOX_MEDIA_DIRECTORY="resources/public/media" \
-    UXBOX_MEDIA_URI="http://localhost:6060/media/" \
-    UXBOX_ASSETS_DIRECTORY="resources/public/static" \
-    UXBOX_ASSETS_URI="http://localhost:6060/static/" \
-    UXBOX_COLLECTIONS_CONFIG="/srv/media/config.edn" \
-    UXBOX_EMAIL_REPLY_TO="no-reply@uxbox.io" \
-    UXBOX_EMAIL_FROM="no-reply@uxbox.io" \
-    UXBOX_SMTP_HOST="127.0.0.1" \
-    UXBOX_SMTP_PORT=25 \
-    UXBOX_SMTP_USER="uxbox" \
-    UXBOX_SMTP_PASSWORD="youshouldoverwritethiswithsomethingelse" \
-    UXBOX_SMTP_SSL=false \
-    UXBOX_SMTP_TLS=false \
-    UXBOX_SMTP_ENABLED=false \
-    UXBOX_REGISTRATION_ENABLED=true \
-    UXBOX_SECRET="5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw"
+ENV PENPOT_HTTP_SERVER_PORT=6060 \
+    PENPOT_HTTP_SERVER_DEBUG=false \
+    PENPOT_PUBLIC_URI=http://localhost/ \
+    PENPOT_DATABASE_URI= \
+    PENPOT_DATABASE_USERNAME="penpot" \
+    PENPOT_DATABASE_PASSWORD="youshouldoverwritethiswithsomethingelse" \
+    PENPOT_DATABASE_NAME="penpot" \
+    PENPOT_DATABASE_SERVER="127.0.0.1" \
+    PENPOT_DATABASE_PORT=5432 \
+    PENPOT_MEDIA_DIRECTORY="resources/public/media" \
+    PENPOT_MEDIA_URI="http://localhost:6060/media/" \
+    PENPOT_ASSETS_DIRECTORY="resources/public/static" \
+    PENPOT_ASSETS_URI="http://localhost:6060/static/" \
+    PENPOT_COLLECTIONS_CONFIG="/srv/media/config.edn" \
+    PENPOT_EMAIL_REPLY_TO="no-reply@penpot.io" \
+    PENPOT_EMAIL_FROM="no-reply@penpot.io" \
+    PENPOT_SMTP_HOST="127.0.0.1" \
+    PENPOT_SMTP_PORT=25 \
+    PENPOT_SMTP_USER="penpot" \
+    PENPOT_SMTP_PASSWORD="youshouldoverwritethiswithsomethingelse" \
+    PENPOT_SMTP_SSL=false \
+    PENPOT_SMTP_TLS=false \
+    PENPOT_SMTP_ENABLED=false \
+    PENPOT_REGISTRATION_ENABLED=true \
+    PENPOT_SECRET="5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw"
 
-WORKDIR /home/uxbox/backend
+WORKDIR /home/penpot/backend
 
-VOLUME [ "/home/uxbox/resources/public", "/srv/media" ]
+VOLUME [ "/home/penpot/resources/public", "/srv/media" ]
 
 EXPOSE 6060
 
@@ -99,12 +99,12 @@ ARG BUILD_DATE
 LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     version=$VERSION \
     org.label-schema.vcs-ref=$VCS_REF \
-    org.label-schema.vcs-url="https://github.com/Monogramm/docker-uxbox-backend" \
+    org.label-schema.vcs-url="https://github.com/Monogramm/docker-penpot-backend" \
     org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.name="UXBOX (backend) - The Open-Source prototyping tool" \
+    org.label-schema.name="PENPOT (backend) - The Open-Source prototyping tool" \
     org.label-schema.description="The open-source solution for design and prototyping" \
-    org.label-schema.url="https://www.uxbox.io/" \
-    org.label-schema.vendor="UXBOX" \
+    org.label-schema.url="https://www.penpot.io/" \
+    org.label-schema.vendor="PENPOT" \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0"
 

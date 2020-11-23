@@ -1,54 +1,53 @@
-
-[uri_license]: http://www.gnu.org/licenses/gpl.html
-[uri_license_image]: https://img.shields.io/badge/License-GPL%20v3-blue.svg
-
 [![License: GPL v3][uri_license_image]][uri_license]
-[![Build Status](https://travis-ci.org/Monogramm/docker-uxbox-backend.svg)](https://travis-ci.org/Monogramm/docker-uxbox-backend)
-[![Docker Automated buid](https://img.shields.io/docker/cloud/build/monogramm/docker-uxbox-backend.svg)](https://hub.docker.com/r/monogramm/docker-uxbox-backend/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/monogramm/docker-uxbox-backend.svg)](https://hub.docker.com/r/monogramm/docker-uxbox-backend/)
-[![](https://images.microbadger.com/badges/version/monogramm/docker-uxbox-backend.svg)](https://microbadger.com/images/monogramm/docker-uxbox-backend)
-[![](https://images.microbadger.com/badges/image/monogramm/docker-uxbox-backend.svg)](https://microbadger.com/images/monogramm/docker-uxbox-backend)
+[![Build Status](https://travis-ci.org/Monogramm/docker-penpot-backend.svg)](https://travis-ci.org/Monogramm/docker-penpot-backend)
+[![Docker Automated buid](https://img.shields.io/docker/cloud/build/monogramm/docker-penpot-backend.svg)](https://hub.docker.com/r/monogramm/docker-penpot-backend/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/monogramm/docker-penpot-backend.svg)](https://hub.docker.com/r/monogramm/docker-penpot-backend/)
+[![](https://images.microbadger.com/badges/version/monogramm/docker-penpot-backend.svg)](https://microbadger.com/images/monogramm/docker-penpot-backend)
+[![](https://images.microbadger.com/badges/image/monogramm/docker-penpot-backend.svg)](https://microbadger.com/images/monogramm/docker-penpot-backend)
 
-# UXBOX Backend Docker image
+# PenPot Backend Docker image
 
-Docker image for UXBOX Backend.
+Docker image for PenPot Backend.
 
 🚧 **This image is still in development!**
 
-## What is UXBOX ?
+## What is PenPot ?
 
-UXBOX is The Open-Source prototyping tool.
+PenPot is The Open-Source prototyping tool.
 
-> https://www.uxbox.io/
+> <https://www.penpot.app/>
 
-> https://github.com/uxbox/uxbox
+> <https://github.com/penpot/penpot>
 
 ## Supported tags
 
-https://hub.docker.com/r/monogramm/docker-uxbox-backend/
+<https://hub.docker.com/r/monogramm/docker-penpot-backend/>
 
-* Branch `master`
-    * `11-slim` `latest`
-    * `11`
-    * `14-slim`
-    * `14`
-    * `14-alpine`
-    * `15-slim`
-    * `15`
-    * `15-alpine`
-* Branch `develop`
-    * `develop`
+-   Branch `master`
+    -   `11-slim` `latest`
+    -   `11`
+    -   `14-slim`
+    -   `14`
+    -   `14-alpine`
+    -   `15-slim`
+    -   `15`
+    -   `15-alpine`
+-   Branch `develop`
+    -   `develop`
 
 ## How to run this image ?
 
 ### Persistent data
-The UXBOX installation and all data are stored in the database (file uploads, etc). The docker daemon will store that data within the docker directory `/var/lib/docker/volumes/...`. That means your data is saved even if the container crashes, is stopped or deleted.
+
+The PenPot installation and all data are stored in the database (file uploads, etc). The docker daemon will store that data within the docker directory `/var/lib/docker/volumes/...`. That means your data is saved even if the container crashes, is stopped or deleted.
 
 To make your data persistent to upgrading and get access for backups is using named docker volume or mount a host folder. To achieve this you need one volume for your database container.
 
 Database:
-- `/var/lib/mysql` MySQL / MariaDB Data
-- `/var/lib/postgresql/data` PostgreSQL Data
+
+-   `/var/lib/mysql` MySQL / MariaDB Data
+-   `/var/lib/postgresql/data` PostgreSQL Data
+
 ```console
 $ docker run -d \
     -v db:/var/lib/postgresql/data \
@@ -57,37 +56,44 @@ $ docker run -d \
 
 ### Auto configuration via environment variables
 
-The following environment variables are also honored for configuring your UXBOX instance:
+The following environment variables are also honored for configuring your PenPot instance:
 
 Available at runtime:
--	`-e LANG=...` (defaults to `en_US.UTF-8`)
--	`-e LC_ALL=...` (defaults to `C.UTF-8`)
--	`-e UXBOX_HTTP_SERVER_PORT=...` (defaults to `6060`)
--	`-e UXBOX_HTTP_SERVER_DEBUG=...` (defaults to `false`)
--	`-e UXBOX_HTTP_SERVER_CORS=...` (defaults to `http://localhost:3449`)
--	`-e UXBOX_DATABASE_USERNAME="..."` (defaults to `uxbox`)
--	`-e UXBOX_DATABASE_PASSWORD="..."` (defaults to `youshouldoverwritethiswithsomethingelse`)
--	`-e UXBOX_DATABASE_URI="..."` (defaults to ` `, will be computed based on other DATABASE parameters if empty)
--	`-e UXBOX_DATABASE_NAME="..."` (defaults to `uxbox`)
--	`-e UXBOX_DATABASE_SERVER="..."` (defaults to `127.0.0.1`)
--	`-e UXBOX_DATABASE_PORT=...` (defaults to `5432`)
--	`-e UXBOX_MEDIA_DIRECTORY=...` (defaults to `resources/public/media`)
--	`-e UXBOX_MEDIA_URI=...` (defaults to `http://localhost:6060/media/`)
--	`-e UXBOX_ASSETS_DIRECTORY=...` (defaults to `resources/public/static`)
--	`-e UXBOX_ASSETS_URI=...` (defaults to `http://localhost:6060/static/`)
--	`-e UXBOX_EMAIL_REPLY_TO="..."` (defaults to `no-reply@uxbox.io`)
--	`-e UXBOX_EMAIL_FROM="..."` (defaults to `no-reply@uxbox.io`)
--	`-e UXBOX_SMTP_HOST="..."` (defaults to `127.0.0.1`)
--	`-e UXBOX_SMTP_PORT=...` (defaults to `25`)
--	`-e UXBOX_SMTP_USER="..."` (defaults to `uxbox`)
--	`-e UXBOX_SMTP_PASSWORD="..."` (defaults to `youshouldoverwritethiswithsomethingelse`)
--	`-e UXBOX_SMTP_SSL=...` (defaults to `false`)
--	`-e UXBOX_SMTP_TLS=...` (defaults to `false`)
--	`-e UXBOX_SMTP_ENABLED=...` (defaults to `false`)
--	`-e UXBOX_REGISTRATION_ENABLED=...` (defaults to `true`)
--	`-e UXBOX_SECRET="..."` (defaults to `5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw`)
+
+-   `-e LANG=...` (defaults to `en_US.UTF-8`)
+-   `-e LC_ALL=...` (defaults to `C.UTF-8`)
+-   `-e PenPot_HTTP_SERVER_PORT=...` (defaults to `6060`)
+-   `-e PenPot_HTTP_SERVER_DEBUG=...` (defaults to `false`)
+-   `-e PenPot_HTTP_SERVER_CORS=...` (defaults to `http://localhost:3449`)
+-   `-e PenPot_DATABASE_USERNAME="..."` (defaults to `penpot`)
+-   `-e PenPot_DATABASE_PASSWORD="..."` (defaults to `youshouldoverwritethiswithsomethingelse`)
+-   `-e PenPot_DATABASE_URI="..."` (defaults to ` `, will be computed based on other DATABASE parameters if empty)
+-   `-e PenPot_DATABASE_NAME="..."` (defaults to `penpot`)
+-   `-e PenPot_DATABASE_SERVER="..."` (defaults to `127.0.0.1`)
+-   `-e PenPot_DATABASE_PORT=...` (defaults to `5432`)
+-   `-e PenPot_MEDIA_DIRECTORY=...` (defaults to `resources/public/media`)
+-   `-e PenPot_MEDIA_URI=...` (defaults to `http://localhost:6060/media/`)
+-   `-e PenPot_ASSETS_DIRECTORY=...` (defaults to `resources/public/static`)
+-   `-e PenPot_ASSETS_URI=...` (defaults to `http://localhost:6060/static/`)
+-   `-e PenPot_EMAIL_REPLY_TO="..."` (defaults to `no-reply@penpot.io`)
+-   `-e PenPot_EMAIL_FROM="..."` (defaults to `no-reply@penpot.io`)
+-   `-e PenPot_SMTP_HOST="..."` (defaults to `127.0.0.1`)
+-   `-e PenPot_SMTP_PORT=...` (defaults to `25`)
+-   `-e PenPot_SMTP_USER="..."` (defaults to `penpot`)
+-   `-e PenPot_SMTP_PASSWORD="..."` (defaults to `youshouldoverwritethiswithsomethingelse`)
+-   `-e PenPot_SMTP_SSL=...` (defaults to `false`)
+-   `-e PenPot_SMTP_TLS=...` (defaults to `false`)
+-   `-e PenPot_SMTP_ENABLED=...` (defaults to `false`)
+-   `-e PenPot_REGISTRATION_ENABLED=...` (defaults to `true`)
+-   `-e PenPot_SECRET="..."` (defaults to `5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw`)
 
 **Important note:** make sure to use quotation marks for string variables or the backend might try to interpret the values as symbols and have weird issues.
 
-# Questions / Issues
-If you got any questions or problems using the image, please visit our [Github Repository](https://github.com/Monogramm/docker-uxbox-backend) and write an issue.
+## Questions / Issues
+
+If you got any questions or problems using the image, please visit our [Github Repository](https://github.com/Monogramm/docker-penpot-backend) and write an issue.
+
+[uri_license]: http://www.gnu.org/licenses/gpl.html
+
+[uri_license_image]: https://img.shields.io/badge/License-GPL%20v3-blue.svg
+

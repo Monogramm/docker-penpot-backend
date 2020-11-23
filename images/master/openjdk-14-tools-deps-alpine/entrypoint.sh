@@ -6,35 +6,35 @@ log() {
 }
 
 # ------------------------------------------------------------------------------
-log "Initializing UXBOX Backend directories..."
+log "Initializing PENPOT Backend directories..."
 mkdir -p \
-    "$(echo ${UXBOX_MEDIA_DIRECTORY} | tr -d \")" \
-    "$(echo ${UXBOX_ASSETS_DIRECTORY} | tr -d \")"
+    "$(echo ${PENPOT_MEDIA_DIRECTORY} | tr -d \")" \
+    "$(echo ${PENPOT_ASSETS_DIRECTORY} | tr -d \")"
 
 # ------------------------------------------------------------------------------
 
-if [ -z "$UXBOX_DATABASE_URI" ]; then
+if [ -z "$PENPOT_DATABASE_URI" ]; then
     log "Initializing database connection string..."
-    UXBOX_DATABASE_URI="postgresql://$(echo ${UXBOX_DATABASE_SERVER} | tr -d '"'):${UXBOX_DATABASE_PORT}/$(echo ${UXBOX_DATABASE_NAME} | tr -d '"')
-    log "Database connection string: $UXBOX_DATABASE_URI"
+    PENPOT_DATABASE_URI="postgresql://$(echo ${PENPOT_DATABASE_SERVER} | tr -d '"'):${PENPOT_DATABASE_PORT}/$(echo ${PENPOT_DATABASE_NAME} | tr -d '"')
+    log "Database connection string: $PENPOT_DATABASE_URI"
 fi
 
 # ------------------------------------------------------------------------------
 
 # TODO Find a way to only update sources if new version in source
 
-log "Copying UXBOX Backend sources..."
+log "Copying PENPOT Backend sources..."
 rsync -rlD --delete \
-    --exclude "$(echo ${UXBOX_MEDIA_DIRECTORY} | tr -d \")" \
-    /usr/src/uxbox/target/dist/ \
+    --exclude "$(echo ${PENPOT_MEDIA_DIRECTORY} | tr -d \")" \
+    /usr/src/penpot/target/dist/ \
     ./
 
-log "Copying UXBOX Backend assets..."
+log "Copying PENPOT Backend assets..."
 rsync -rlD --delete \
-    /usr/src/uxbox/target/dist/resources/public/static \
-    "$(echo ${UXBOX_ASSETS_DIRECTORY} | tr -d \")"
+    /usr/src/penpot/target/dist/resources/public/static \
+    "$(echo ${PENPOT_ASSETS_DIRECTORY} | tr -d \")"
 
-log "Copying UXBOX default media..."
+log "Copying PENPOT default media..."
 rsync -rlD \
     /usr/src/media \
     /srv/media
@@ -42,27 +42,27 @@ rsync -rlD \
 # ------------------------------------------------------------------------------
 # Import (new) built-in collections if any found
 
-if [ -n "${UXBOX_COLLECTIONS_CONFIG}" ]; then
-    TEMP_UXBOX_COLLECTIONS_CONFIG=$(echo ${UXBOX_COLLECTIONS_CONFIG} | tr -d \")
+if [ -n "${PENPOT_COLLECTIONS_CONFIG}" ]; then
+    TEMP_PENPOT_COLLECTIONS_CONFIG=$(echo ${PENPOT_COLLECTIONS_CONFIG} | tr -d \")
 
-    if [ -f "${TEMP_UXBOX_COLLECTIONS_CONFIG}" ] && [ ! -f "${TEMP_UXBOX_COLLECTIONS_CONFIG}.loaded" ]; then
-        log "Importing collections from config ${UXBOX_COLLECTIONS_CONFIG}..."
-        clojure -Adev -m uxbox.cli.collimp "${TEMP_UXBOX_COLLECTIONS_CONFIG}"
-        touch "${TEMP_UXBOX_COLLECTIONS_CONFIG}.loaded"
+    if [ -f "${TEMP_PENPOT_COLLECTIONS_CONFIG}" ] && [ ! -f "${TEMP_PENPOT_COLLECTIONS_CONFIG}.loaded" ]; then
+        log "Importing collections from config ${PENPOT_COLLECTIONS_CONFIG}..."
+        clojure -Adev -m penpot.cli.collimp "${TEMP_PENPOT_COLLECTIONS_CONFIG}"
+        touch "${TEMP_PENPOT_COLLECTIONS_CONFIG}.loaded"
     else
-        log "Collections from config ${UXBOX_COLLECTIONS_CONFIG} already imported."
+        log "Collections from config ${PENPOT_COLLECTIONS_CONFIG} already imported."
     fi
 
-    TEMP_UXBOX_COLLECTIONS_CONFIG=
+    TEMP_PENPOT_COLLECTIONS_CONFIG=
 fi
 
 # ------------------------------------------------------------------------------
 # Generate demo data
 
-if [ -n "${UXBOX_DEMO_DATA}" ]; then
+if [ -n "${PENPOT_DEMO_DATA}" ]; then
     if [ ! -e ~/.fixtures-loaded ]; then
         log "Loading fixtures..."
-        clojure -Adev -m uxbox.fixtures
+        clojure -Adev -m penpot.fixtures
         touch ~/.fixtures-loaded
         log "Loaded fixtures."
     else
@@ -71,5 +71,5 @@ if [ -n "${UXBOX_DEMO_DATA}" ]; then
 fi
 
 # ------------------------------------------------------------------------------
-log "Starting UXBOX backend..."
+log "Starting PENPOT backend..."
 exec "$@"
