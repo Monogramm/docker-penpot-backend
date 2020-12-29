@@ -86,7 +86,7 @@ for latest in "${latests[@]}"; do
 			cp "template/.dockerignore" "$dir/.dockerignore"
 			cp "template/entrypoint.sh" "$dir/entrypoint.sh"
 			cp "template/.env" "$dir/.env"
-			cp "template/docker-compose_${compose[$variant]}.yml" "$dir/docker-compose.yml"
+			cp "template/docker-compose_${compose[$variant]}.yml" "$dir/docker-compose.test.yml"
 
 			# Replace the variables.
 			sed -ri -e '
@@ -94,6 +94,15 @@ for latest in "${latests[@]}"; do
 				s/%%VERSION%%/'"$latest"'/g;
 			' "$dir/Dockerfile"
 
+			# Create a list of "alias" tags for DockerHub post_push
+			if [ "$latest" = 'master' ]; then
+				export DOCKER_TAG="$variant"
+			else
+				export DOCKER_TAG="$latest-$variant"
+			fi
+			echo "${DOCKER_TAG} " > "$dir/.dockertags"
+
+			# Add Travis-CI env var
 			travisEnv='\n    - VERSION='"$version"' VARIANT='"$variant$travisEnv"
 
 			if [[ $1 == 'build' ]]; then
