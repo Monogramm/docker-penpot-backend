@@ -24,7 +24,7 @@ jobs:
 
       - name: Build the stack
         id: docker_build
-        run: docker-compose -f ./images/${{ matrix.version}}/${{ matrix.variant }}/docker-compose.test.yml build
+        run: docker-compose -f docker-compose.test.yml --project-directory ./images/${{ matrix.version}}/${{ matrix.variant }} build
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
