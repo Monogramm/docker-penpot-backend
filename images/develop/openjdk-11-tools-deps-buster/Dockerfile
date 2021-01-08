@@ -1,4 +1,4 @@
-FROM monogramm/docker-penpot-builder:develop as builder
+FROM monogramm/docker-penpot-builder:latest as builder
 
 ARG VERSION=develop
 
@@ -42,12 +42,10 @@ ARG EXTERNAL_UID=1000
 
 # add new user
 RUN set -ex; \
-    adduser \
-    --disabled-password \
+    useradd \
     -u $EXTERNAL_UID \
-    -D penpot; \
-    echo "penpot ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/penpot; \
-    chmod 0440 /etc/sudoers.d/penpot
+    penpot; \
+    usermod -aG sudo penpot
 
 USER penpot
 
