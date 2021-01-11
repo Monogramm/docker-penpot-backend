@@ -28,5 +28,29 @@ jobs:
         id: docker_build
         run: docker-compose -f ./images/${{ matrix.version }}/${{ matrix.variant }}/docker-compose.test.yml --project-directory ./images/${{ matrix.version }}/${{ matrix.variant }} build
 
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: docker images
+        run: docker images
+
+      - name: docker-compose -f docker-compose.test.yml up d
+        run: docker-compose -f ./images/${{ matrix.version }}/${{ matrix.variant }}/docker-compose.test.yml --project-directory ./images/${{ matrix.version }}/${{ matrix.variant }} up -d
+
+      - name: docker-compose -f docker-compose.test.yml logs -f "sut"
+        run: docker-compose -f ./images/${{ matrix.version }}/${{ matrix.variant }}/docker-compose.test.yml --project-directory ./images/${{ matrix.version }}/${{ matrix.variant }} logs -f "sut"
+
+      - name: docker-compose -f docker-compose.test.yml ps
+        run: docker-compose -f ./images/${{ matrix.version }}/${{ matrix.variant }}/docker-compose.test.yml --project-directory ./images/${{ matrix.version }}/${{ matrix.variant }} ps
+
+      - name: docker-compose -f docker-compose.test.yml logs "penpot_db"
+        run: docker-compose -f ./images/${{ matrix.version }}/${{ matrix.variant }}/docker-compose.test.yml --project-directory ./images/${{ matrix.version }}/${{ matrix.variant }} logs "penpot_db"
+
+      - name: docker-compose -f docker-compose.test.yml ps "penpot_db" | grep "Up"
+        run: docker-compose -f ./images/${{ matrix.version }}/${{ matrix.variant }}/docker-compose.test.yml --project-directory ./images/${{ matrix.version }}/${{ matrix.variant }} ps "penpot_db" | grep "Up"
+
+      - name: docker-compose -f docker-compose.test.yml logs "penpot_backend"
+        run: docker-compose -f ./images/${{ matrix.version }}/${{ matrix.variant }}/docker-compose.test.yml --project-directory ./images/${{ matrix.version }}/${{ matrix.variant }} logs "penpot_backend"
+
+      - name: docker-compose -f docker-compose.test.yml ps "penpot_backend" | grep "Up"
+        run: docker-compose -f ./images/${{ matrix.version }}/${{ matrix.variant }}/docker-compose.test.yml --project-directory ./images/${{ matrix.version }}/${{ matrix.variant }} ps "penpot_backend" | grep "Up"
+
+      - name: docker-compose -f docker-compose.test.yml logs "penpot_frontend"
+        run: docker-compose -f ./images/${{ matrix.version }}/${{ matrix.variant }}/docker-compose.test.yml --project-directory ./images/${{ matrix.version }}/${{ matrix.variant }} logs "penpot_frontend"
