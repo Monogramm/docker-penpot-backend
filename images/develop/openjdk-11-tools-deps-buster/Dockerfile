@@ -1,4 +1,4 @@
-FROM monogramm/docker-penpot-builder:latest as builder
+FROM monogramm/docker-penpot-builder:develop as builder
 
 ARG VERSION=develop
 
@@ -43,8 +43,10 @@ ARG EXTERNAL_UID=1000
 # add new user
 RUN set -ex; \
     useradd \
-    -u $EXTERNAL_UID \
-    penpot; \
+        -u $EXTERNAL_UID \
+        -U \
+        penpot \
+    ; \
     usermod -aG sudo penpot
 
 USER penpot

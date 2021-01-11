@@ -48,9 +48,10 @@ ARG EXTERNAL_UID=1000
 # add new user
 RUN set -ex; \
     adduser \
-    --disabled-password \
-    -u $EXTERNAL_UID \
-    -D penpot; \
+        --disabled-password \
+        -u $EXTERNAL_UID \
+        -D penpot \
+    ; \
     echo "penpot ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/penpot; \
     chmod 0440 /etc/sudoers.d/penpot
 
