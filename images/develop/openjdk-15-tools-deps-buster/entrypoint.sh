@@ -40,23 +40,6 @@ rsync -rlD \
     /srv/media
 
 # ------------------------------------------------------------------------------
-# Import (new) built-in collections if any found
-
-if [ -n "${PENPOT_COLLECTIONS_CONFIG}" ]; then
-    TEMP_PENPOT_COLLECTIONS_CONFIG=$(echo ${PENPOT_COLLECTIONS_CONFIG} | tr -d \")
-
-    if [ -f "${TEMP_PENPOT_COLLECTIONS_CONFIG}" ] && [ ! -f "${TEMP_PENPOT_COLLECTIONS_CONFIG}.loaded" ]; then
-        log "Importing collections from config ${PENPOT_COLLECTIONS_CONFIG}..."
-        clojure -Adev -m penpot.cli.collimp "${TEMP_PENPOT_COLLECTIONS_CONFIG}"
-        touch "${TEMP_PENPOT_COLLECTIONS_CONFIG}.loaded"
-    else
-        log "Collections from config ${PENPOT_COLLECTIONS_CONFIG} already imported."
-    fi
-
-    TEMP_PENPOT_COLLECTIONS_CONFIG=
-fi
-
-# ------------------------------------------------------------------------------
 # Generate demo data
 
 if [ -n "${PENPOT_DEMO_DATA}" ]; then
