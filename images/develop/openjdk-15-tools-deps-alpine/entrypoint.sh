@@ -8,15 +8,15 @@ log() {
 # ------------------------------------------------------------------------------
 log "Initializing PENPOT Backend directories..."
 mkdir -p \
-    "$(echo ${PENPOT_MEDIA_DIRECTORY} | tr -d \")" \
-    "$(echo ${PENPOT_ASSETS_DIRECTORY} | tr -d \")"
+    "${PENPOT_MEDIA_DIRECTORY}" \
+    "${PENPOT_ASSETS_DIRECTORY}"
 
 # ------------------------------------------------------------------------------
 
 if [ -z "$PENPOT_DATABASE_URI" ]; then
     log "Initializing database connection string..."
-    PENPOT_DATABASE_URI="postgresql://$(echo ${PENPOT_DATABASE_SERVER} | tr -d '"'):${PENPOT_DATABASE_PORT}/$(echo ${PENPOT_DATABASE_NAME} | tr -d '"')
-    log "Database connection string: $PENPOT_DATABASE_URI"
+    PENPOT_DATABASE_URI="postgresql://${PENPOT_DATABASE_SERVER}:${PENPOT_DATABASE_PORT}/${PENPOT_DATABASE_NAME}"
+    log "Database connection string: ${PENPOT_DATABASE_URI}"
 fi
 
 # ------------------------------------------------------------------------------
@@ -25,14 +25,14 @@ fi
 
 log "Copying PENPOT Backend sources..."
 rsync -rlD --delete \
-    --exclude "$(echo ${PENPOT_MEDIA_DIRECTORY} | tr -d \")" \
+    --exclude "${PENPOT_MEDIA_DIRECTORY}" \
     /usr/src/penpot/target/dist/ \
     ./
 
 log "Copying PENPOT Backend assets..."
 rsync -rlD --delete \
     /usr/src/penpot/target/dist/resources/public/static \
-    "$(echo ${PENPOT_ASSETS_DIRECTORY} | tr -d \")"
+    "${PENPOT_ASSETS_DIRECTORY}"
 
 log "Copying PENPOT default media..."
 rsync -rlD \
