@@ -6,14 +6,8 @@ log() {
 }
 
 # ------------------------------------------------------------------------------
-log "Initializing PENPOT Backend directories..."
-mkdir -p \
-    "${PENPOT_MEDIA_DIRECTORY}" \
-    "${PENPOT_ASSETS_DIRECTORY}"
 
-# ------------------------------------------------------------------------------
-
-if [ -z "$PENPOT_DATABASE_URI" ]; then
+if [ -z "${PENPOT_DATABASE_URI}" ]; then
     log "Initializing database connection string..."
     PENPOT_DATABASE_URI="postgresql://${PENPOT_DATABASE_SERVER}:${PENPOT_DATABASE_PORT}/${PENPOT_DATABASE_NAME}"
     log "Database connection string: ${PENPOT_DATABASE_URI}"
@@ -21,23 +15,33 @@ fi
 
 # ------------------------------------------------------------------------------
 
-# TODO Find a way to only update sources if new version in source
+if [ -n "${PENPOT_MEDIA_DIRECTORY}" ] && [ -d /home/penpot/backend/target/dist ]; then
+    log "Initializing Backend sources..."
+    mkdir -p \
+        "${PENPOT_MEDIA_DIRECTORY}"
+    log "Copying Backend sources..."
+    rsync -rlD --delete \
+        --exclude "${PENPOT_MEDIA_DIRECTORY}" \
+        /home/penpot/backend/target/dist/ \
+        ./
+fi
 
-log "Copying PENPOT Backend sources..."
-rsync -rlD --delete \
-    --exclude "${PENPOT_MEDIA_DIRECTORY}" \
-    /usr/src/penpot/target/dist/ \
-    ./
+if [ -n "${PENPOT_ASSETS_DIRECTORY}" ] && [ -d /home/penpot/backend/target/dist/resources/public/static ]; then
+    log "Initializing Backend assets..."
+    mkdir -p \
+        "${PENPOT_ASSETS_DIRECTORY}"
+    log "Copying Backend assets..."
+    rsync -rlD --delete \
+        /home/penpot/backend/target/dist/resources/public/static \
+        "${PENPOT_ASSETS_DIRECTORY}"
+fi
 
-log "Copying PENPOT Backend assets..."
-rsync -rlD --delete \
-    /usr/src/penpot/target/dist/resources/public/static \
-    "${PENPOT_ASSETS_DIRECTORY}"
-
-log "Copying PENPOT default media..."
-rsync -rlD \
-    /usr/src/media \
-    /srv/media
+if [ -d /usr/src/media ]; then
+    log "Copying default media..."
+    rsync -rlD \
+        /usr/src/media \
+        /opt/data
+fi
 
 # ------------------------------------------------------------------------------
 # Generate demo data
@@ -54,5 +58,5 @@ if [ -n "${PENPOT_DEMO_DATA}" ]; then
 fi
 
 # ------------------------------------------------------------------------------
-log "Starting PENPOT backend..."
+log "Starting backend..."
 exec "$@"

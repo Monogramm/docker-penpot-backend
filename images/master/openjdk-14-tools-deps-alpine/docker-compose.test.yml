@@ -45,7 +45,7 @@ services:
     expose:
       - '80'
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       #- frontend_data:/usr/share/nginx/html
       - backend_data:/srv/penpot/resources/public:ro
@@ -100,7 +100,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
     environment:
-      - PENPOT_DEMO_DATA=1
+      - PENPOT_DEMO_DATA=
       # Security setup
       - PENPOT_SECRET=${PENPOT_SECRET}
       - PENPOT_ALLOW_DEMO_USERS=false

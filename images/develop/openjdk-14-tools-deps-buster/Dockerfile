@@ -16,8 +16,11 @@ RUN set -ex; \
 
 WORKDIR /home/penpot/backend
 
-# Fetch dependencies (cache them on this step)
-RUN clojure -Stree;
+# Fetch dependencies (cache them on this step) and build
+RUN set -ex; \
+    clojure -Stree; \
+    ./scripts/build.sh; \
+    ls -al ./target/dist
 
 
 # Once application has been built, prepare production image
@@ -43,7 +46,7 @@ ARG EXTERNAL_UID=1000
 # add new user
 RUN set -ex; \
     useradd \
-        -u $EXTERNAL_UID \
+        -u "$EXTERNAL_UID" \
         -U \
         penpot \
     ; \
@@ -57,8 +60,6 @@ COPY --chown=penpot:penpot --from=builder /home/penpot /home/penpot
 
 # Add entrypoint
 COPY --chown=penpot:penpot ./entrypoint.sh /entrypoint.sh
-
-RUN chmod 755 /entrypoint.sh
 
 ENV PENPOT_HTTP_SERVER_PORT=6060 \
     PENPOT_HTTP_SERVER_DEBUG=false \
@@ -84,7 +85,7 @@ ENV PENPOT_HTTP_SERVER_PORT=6060 \
 
 WORKDIR /home/penpot/backend
 
-VOLUME [ "/home/penpot/resources/public", "/srv/media" ]
+VOLUME [ "/home/penpot/resources/public", "/opt/data" ]
 
 EXPOSE 6060
 
@@ -105,4 +106,4 @@ LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     org.label-schema.schema-version="1.0"
 
 ENTRYPOINT ["sh", "/entrypoint.sh"]
-CMD ["./bin/start-prod"]
+CMD ["./target/dist/run.sh"]

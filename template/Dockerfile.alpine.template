@@ -16,8 +16,11 @@ RUN set -ex; \
 
 WORKDIR /home/penpot/backend
 
-# Fetch dependencies (cache them on this step)
-RUN clojure -Stree;
+# Fetch dependencies (cache them on this step) and build
+RUN set -ex; \
+    clojure -Stree; \
+    ./scripts/build.sh; \
+    ls -al ./target/dist
 
 
 # Once application has been built, prepare production image
@@ -38,9 +41,9 @@ RUN set -ex; \
         rsync \
     ; \
     rm -rf /var/cache/apk/*; \
-    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk; \
-    apk add --no-cache --allow-untrusted glibc-${GLIBC_VERSION}.apk; \
-    rm glibc-${GLIBC_VERSION}.apk
+    wget "https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk"; \
+    apk add --no-cache --allow-untrusted "glibc-${GLIBC_VERSION}.apk"; \
+    rm "glibc-${GLIBC_VERSION}.apk"
 
 
 ARG EXTERNAL_UID=1000
@@ -49,7 +52,7 @@ ARG EXTERNAL_UID=1000
 RUN set -ex; \
     adduser \
         --disabled-password \
-        -u $EXTERNAL_UID \
+        -u "$EXTERNAL_UID" \
         -D penpot \
     ; \
     echo "penpot ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/penpot; \
@@ -63,8 +66,6 @@ COPY --chown=penpot:penpot --from=builder /home/penpot /home/penpot
 
 # Add entrypoint
 COPY --chown=penpot:penpot ./entrypoint.sh /entrypoint.sh
-
-RUN chmod 755 /entrypoint.sh
 
 ENV PENPOT_HTTP_SERVER_PORT=6060 \
     PENPOT_HTTP_SERVER_DEBUG=false \
@@ -90,7 +91,7 @@ ENV PENPOT_HTTP_SERVER_PORT=6060 \
 
 WORKDIR /home/penpot/backend
 
-VOLUME [ "/home/penpot/resources/public", "/srv/media" ]
+VOLUME [ "/home/penpot/resources/public", "/opt/data" ]
 
 EXPOSE 6060
 
@@ -111,4 +112,4 @@ LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     org.label-schema.schema-version="1.0"
 
 ENTRYPOINT ["sh", "/entrypoint.sh"]
-CMD ["./bin/start-prod"]
+CMD ["./target/dist/run.sh"]
