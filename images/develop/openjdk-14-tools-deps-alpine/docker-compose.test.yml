@@ -33,6 +33,10 @@ services:
       - /etc/timezone:/etc/timezone:ro
 
   penpot-frontend:
+    #build:
+    #  context: ./
+    #  dockerfile: ${DOCKERFILE_PATH}
+    #image: ${IMAGE_NAME}
     image: monogramm/docker-penpot-frontend:develop
     container_name: penpot-frontend
     hostname: $PENPOT_WEB_DOMAIN
@@ -67,8 +71,11 @@ services:
       - PENPOT_DEBUG=false
 
   penpot-backend:
-    build: ./
-    #image: monogramm/docker-penpot-backend:latest
+    #build:
+    #  context: ./
+    #  dockerfile: ${DOCKERFILE_PATH}
+    image: ${IMAGE_NAME}
+    #image: monogramm/docker-penpot-backend:develop
     container_name: penpot-backend
     #restart: always
     depends_on:
