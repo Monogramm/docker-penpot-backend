@@ -62,13 +62,12 @@ services:
       - /etc/timezone:/etc/timezone:ro
     environment:
       - PENPOT_PUBLIC_URI=http://localhost:3449/
-      - PENPOT_GOOGLE_CLIENT_ID=true
-      - PENPOT_LOGIN_WITH_LDAP=false
-      # Only used at build time
       - PENPOT_DEMO_WARNING=true
-      - PENPOT_DEPLOY_DATE=""
-      - PENPOT_DEPLOY_COMMIT=""
-      - PENPOT_DEBUG=false
+      - PENPOT_ALLOW_DEMO_USERS=true
+      - PENPOT_GOOGLE_CLIENT_ID=
+      - PENPOT_GITLAB_CLIENT_ID=
+      - PENPOT_GITHUB_CLIENT_ID=
+      - PENPOT_LOGIN_WITH_LDAP=true
 
   penpot-backend:
     #build:
