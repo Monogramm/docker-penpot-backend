@@ -36,6 +36,7 @@ RUN set -ex; \
     apk add --no-cache \
         bash \
         curl \
+        gnupg \
         imagemagick \
         libwebp \
         rsync \
@@ -60,13 +61,6 @@ RUN set -ex; \
 
 USER penpot
 
-# Add penpot as provided by builder and create directories
-COPY --chown=penpot:penpot --from=builder /root/.m2 ~/.m2
-COPY --chown=penpot:penpot --from=builder /home/penpot /home/penpot
-
-# Add entrypoint
-COPY --chown=penpot:penpot ./entrypoint.sh /entrypoint.sh
-
 ENV PENPOT_HTTP_SERVER_PORT=6060 \
     PENPOT_HTTP_SERVER_DEBUG=false \
     PENPOT_PUBLIC_URI=http://localhost/ \
@@ -89,7 +83,17 @@ ENV PENPOT_HTTP_SERVER_PORT=6060 \
     PENPOT_REGISTRATION_ENABLED=true \
     PENPOT_SECRET=5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw
 
-WORKDIR /home/penpot/backend
+# Add penpot as provided by builder and create directories
+COPY --chown=penpot:penpot --from=builder /root/.m2 ~/.m2
+COPY --chown=penpot:penpot --from=builder /home/penpot /home/penpot
+
+# Add entrypoint
+COPY --chown=penpot:penpot ./entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["sh", "/entrypoint.sh"]
+CMD ["./run.sh"]
+
+WORKDIR /home/penpot/backend/target/dist
 
 VOLUME [ "/home/penpot/resources/public", "/opt/data" ]
 
@@ -110,6 +114,3 @@ LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     org.label-schema.vendor="PENPOT" \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0"
-
-ENTRYPOINT ["sh", "/entrypoint.sh"]
-CMD ["./target/dist/run.sh"]

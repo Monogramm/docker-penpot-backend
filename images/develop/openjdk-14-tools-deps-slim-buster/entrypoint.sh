@@ -58,5 +58,5 @@ if [ -n "${PENPOT_DEMO_DATA}" ]; then
 fi
 
 # ------------------------------------------------------------------------------
-log "Starting backend..."
+log "Starting command..."
 exec "$@"
