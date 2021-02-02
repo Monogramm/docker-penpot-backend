@@ -11,7 +11,7 @@ Docker image for Penpot Backend.
 
 🚧 **This image is still in beta!**
 
-## What is Penpot ?
+## What is Penpot
 
 Penpot is The Open-Source prototyping tool.
 
