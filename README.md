@@ -1,5 +1,5 @@
 [![License: GPL v3][uri_license_image]][uri_license]
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Monogramm/docker-penpot-backend/Docker%20Image%20CI)](https://github.com/Monogramm/docker-penpot-backend)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Monogramm/docker-penpot-backend/Docker%20Image%20CI)](https://github.com/Monogramm/docker-penpot-backend/actions)
 [![Docker Automated buid](https://img.shields.io/docker/cloud/build/monogramm/docker-penpot-backend.svg)](https://hub.docker.com/r/monogramm/docker-penpot-backend/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/monogramm/docker-penpot-backend.svg)](https://hub.docker.com/r/monogramm/docker-penpot-backend/)
 [![](https://images.microbadger.com/badges/version/monogramm/docker-penpot-backend.svg)](https://microbadger.com/images/monogramm/docker-penpot-backend)
