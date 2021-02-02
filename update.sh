@@ -2,34 +2,53 @@
 set -eo pipefail
 
 declare -A compose=(
-	[8-jre]='debian'
-	[8-jre-slim]='debian'
-	[8-jre-alpine]='alpine'
-	[11-jdk]='debian'
-	[11-jdk-slim]='debian'
-	[13-jdk-alpine]='alpine'
+	[openjdk-11-tools-deps-slim-buster]='debian'
+	[openjdk-11-tools-deps-buster]='debian'
+	[openjdk-14-tools-deps-slim-buster]='debian'
+	[openjdk-14-tools-deps-buster]='debian'
+	[openjdk-14-tools-deps-alpine]='alpine'
+	[openjdk-15-tools-deps-slim-buster]='debian'
+	[openjdk-15-tools-deps-buster]='debian'
+	[openjdk-15-tools-deps-alpine]='alpine'
 )
 
 declare -A base=(
-	[8-jre]='debian'
-	[8-jre-slim]='debian'
-	[8-jre-alpine]='alpine'
-	[11-jdk]='debian'
-	[11-jdk-slim]='debian'
-	[13-jdk-alpine]='alpine'
+	[openjdk-11-tools-deps-slim-buster]='debian'
+	[openjdk-11-tools-deps-buster]='debian'
+	[openjdk-14-tools-deps-slim-buster]='debian'
+	[openjdk-14-tools-deps-buster]='debian'
+	[openjdk-14-tools-deps-alpine]='alpine'
+	[openjdk-15-tools-deps-slim-buster]='debian'
+	[openjdk-15-tools-deps-buster]='debian'
+	[openjdk-15-tools-deps-alpine]='alpine'
+)
+
+declare -A dockerVariant=(
+	[openjdk-11-tools-deps-slim-buster]='jdk-11-slim-buster'
+	[openjdk-11-tools-deps-buster]='jdk-11-buster'
+	[openjdk-14-tools-deps-slim-buster]='jdk-14-slim-buster'
+	[openjdk-14-tools-deps-buster]='jdk-14-buster'
+	[openjdk-14-tools-deps-alpine]='jdk-14-alpine'
+	[openjdk-15-tools-deps-slim-buster]='jdk-15-slim-buster'
+	[openjdk-15-tools-deps-buster]='jdk-15-buster'
+	[openjdk-15-tools-deps-alpine]='jdk-15-alpine'
 )
 
 # Only debian for now, later also 13-alpine
 variants=(
-	8-jre
-	8-jre-slim
-	8-jre-alpine
-	11-jdk
-	11-jdk-slim
-	13-jdk-alpine
+	openjdk-11-tools-deps-slim-buster
+	openjdk-11-tools-deps-buster
+	openjdk-14-tools-deps-slim-buster
+	openjdk-14-tools-deps-buster
+	openjdk-14-tools-deps-alpine
+	openjdk-15-tools-deps-slim-buster
+	openjdk-15-tools-deps-buster
+	openjdk-15-tools-deps-alpine
 )
 
-min_version='0.1'
+min_version='1.0'
+dockerLatest='1.0'
+dockerDefaultVariant='jdk-11-slim-buster'
 
 
 # version_greater_or_equal A B returns whether A >= B
@@ -37,14 +56,14 @@ function version_greater_or_equal() {
 	[[ "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1" || "$1" == "$2" ]];
 }
 
-dockerRepo="monogramm/docker-uxbox-backend"
+dockerRepo="monogramm/docker-penpot-backend"
 # Retrieve automatically the latest versions (when release available)
-#latests=( $( curl -fsSL 'https://api.github.com/repos/uxbox/uxbox/tags' |tac|tac| \
-#	grep -oE '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | \
-#	sort -urV ) )
-
 latests=(
-	master
+	main
+	develop
+	$( curl -fsSL 'https://api.github.com/repos/penpot/penpot/tags' |tac|tac| \
+	grep -oE '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(-alpha|-beta)?' | \
+	sort -urV )
 )
 
 # Remove existing images
@@ -57,22 +76,29 @@ travisEnv=
 for latest in "${latests[@]}"; do
 	version=$(echo "$latest" | cut -d. -f1-2)
 
-	if [ -d "$version" ]; then
-		continue
-	fi
-
 	# Only add versions >= "$min_version"
 	if version_greater_or_equal "$version" "$min_version"; then
 
 		for variant in "${variants[@]}"; do
-			echo "updating $latest [$version-$variant]"
-
 			# Create the version directory with a Dockerfile.
 			dir="images/$version/$variant"
+			if [ -d "$dir" ]; then
+				continue
+			fi
+
+			echo "updating $latest [$version-$variant]"
 			mkdir -p "$dir"
 
-			template="Dockerfile-${base[$variant]}.template"
-			cp "$template" "$dir/Dockerfile"
+			# Copy files.
+			template="Dockerfile.${base[$variant]}.template"
+			cp "template/$template" "$dir/Dockerfile"
+
+			cp -r "template/hooks/" "$dir/"
+			cp -r "template/test/" "$dir/"
+			cp "template/.dockerignore" "$dir/.dockerignore"
+			cp "template/entrypoint.sh" "$dir/entrypoint.sh"
+			cp "template/.env" "$dir/.env"
+			cp "template/docker-compose_${compose[$variant]}.yml" "$dir/docker-compose.test.yml"
 
 			# Replace the variables.
 			sed -ri -e '
@@ -80,16 +106,35 @@ for latest in "${latests[@]}"; do
 				s/%%VERSION%%/'"$latest"'/g;
 			' "$dir/Dockerfile"
 
-			cp ".dockerignore" "$dir/.dockerignore"
-			cp "docker-entrypoint.sh" "$dir/entrypoint.sh"
-			cp "docker-compose_${compose[$variant]}.yml" "$dir/docker-compose.yml"
+			sed -ri -e '
+				s|DOCKER_TAG=.*|DOCKER_TAG='"$version"'|g;
+				s|DOCKER_REPO=.*|DOCKER_REPO='"$dockerRepo"'|g;
+			' "$dir/hooks/run"
 
+			# Create a list of "alias" tags for DockerHub post_push
+			if [ "$version" = "$dockerLatest" ]; then
+				tagVariant=${dockerVariant[$variant]}
+				if [ "$tagVariant" = "$dockerDefaultVariant" ]; then
+					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant $tagVariant $latest $version latest "
+				else
+					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant $tagVariant "
+				fi
+			else
+				if [ "$tagVariant" = "$dockerDefaultVariant" ]; then
+					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant $latest $version "
+				else
+					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant "
+				fi
+			fi
+			echo "${DOCKER_TAGS} " > "$dir/.dockertags"
+
+			# Add Travis-CI env var
 			travisEnv='\n    - VERSION='"$version"' VARIANT='"$variant$travisEnv"
 
 			if [[ $1 == 'build' ]]; then
 				tag="$version-$variant"
 				echo "Build Dockerfile for ${tag}"
-				docker build -t ${dockerRepo}:${tag} $dir
+				docker build -t "${dockerRepo}:${tag}" "$dir"
 			fi
 		done
 	fi
