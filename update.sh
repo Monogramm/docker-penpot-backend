@@ -23,6 +23,17 @@ declare -A base=(
 	[openjdk-15-tools-deps-alpine]='alpine'
 )
 
+declare -A dockerVariant=(
+	[openjdk-11-tools-deps-slim-buster]='jdk-11-slim-buster'
+	[openjdk-11-tools-deps-buster]='jdk-11-buster'
+	[openjdk-14-tools-deps-slim-buster]='jdk-14-slim-buster'
+	[openjdk-14-tools-deps-buster]='jdk-14-buster'
+	[openjdk-14-tools-deps-alpine]='jdk-14-alpine'
+	[openjdk-15-tools-deps-slim-buster]='jdk-15-slim-buster'
+	[openjdk-15-tools-deps-buster]='jdk-15-buster'
+	[openjdk-15-tools-deps-alpine]='jdk-15-alpine'
+)
+
 # Only debian for now, later also 13-alpine
 variants=(
 	openjdk-11-tools-deps-slim-buster
@@ -35,7 +46,9 @@ variants=(
 	openjdk-15-tools-deps-alpine
 )
 
-min_version='0.1'
+min_version='1.0'
+dockerLatest='1.0'
+dockerDefaultVariant='jdk-11-slim-buster'
 
 
 # version_greater_or_equal A B returns whether A >= B
@@ -45,13 +58,12 @@ function version_greater_or_equal() {
 
 dockerRepo="monogramm/docker-penpot-backend"
 # Retrieve automatically the latest versions (when release available)
-#latests=( $( curl -fsSL 'https://api.github.com/repos/penpot/penpot/tags' |tac|tac| \
-#	grep -oE '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+' | \
-#	sort -urV ) )
-
 latests=(
-	master
+	main
 	develop
+	$( curl -fsSL 'https://api.github.com/repos/penpot/penpot/tags' |tac|tac| \
+	grep -oE '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(-alpha|-beta)?' | \
+	sort -urV )
 )
 
 # Remove existing images
@@ -100,12 +112,21 @@ for latest in "${latests[@]}"; do
 			' "$dir/hooks/run"
 
 			# Create a list of "alias" tags for DockerHub post_push
-			if [ "$latest" = 'master' ]; then
-				export DOCKER_TAG="$variant"
+			if [ "$version" = "$dockerLatest" ]; then
+				tagVariant=${dockerVariant[$variant]}
+				if [ "$tagVariant" = "$dockerDefaultVariant" ]; then
+					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant $tagVariant $latest $version latest "
+				else
+					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant $tagVariant "
+				fi
 			else
-				export DOCKER_TAG="$latest-$variant"
+				if [ "$tagVariant" = "$dockerDefaultVariant" ]; then
+					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant $latest $version "
+				else
+					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant "
+				fi
 			fi
-			echo "${DOCKER_TAG} " > "$dir/.dockertags"
+			echo "${DOCKER_TAGS} " > "$dir/.dockertags"
 
 			# Add Travis-CI env var
 			travisEnv='\n    - VERSION='"$version"' VARIANT='"$variant$travisEnv"

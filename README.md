@@ -9,7 +9,7 @@
 
 Docker image for Penpot Backend.
 
-🚧 **This image is still in development!**
+🚧 **This image is still in beta!**
 
 ## What is Penpot ?
 
@@ -23,23 +23,26 @@ Penpot is The Open-Source prototyping tool.
 
 <https://hub.docker.com/r/monogramm/docker-penpot-backend/>
 
--   Branch `master`
-    -   `11-slim` `latest`
-    -   `11`
-    -   `14-slim`
-    -   `14`
-    -   `14-alpine`
-    -   `15-slim`
-    -   `15`
-    -   `15-alpine`
--   Branch `develop`
-    -   `develop`
+-   `develop` (`/images/develop/openjdk-11-tools-deps-slim-buster`)
+-   `stable` (`/images/main/openjdk-11-tools-deps-slim-buster`)
+-   `latest` (`/images/1.0/openjdk-11-tools-deps-slim-buster`)
+
+<!--
+-   `11-slim-buster`
+-   `11-buster`
+-   `14-slim-buster`
+-   `14-buster`
+-   `14-alpine`
+-   `15-slim-buster`
+-   `15-buster`
+-   `15-alpine`
+-->
 
 ## How to run this image ?
 
 ### Persistent data
 
-The Penpot installation and all data are stored in the database (file uploads, etc). The docker daemon will store that data within the docker directory `/var/lib/docker/volumes/...`. That means your data is saved even if the container crashes, is stopped or deleted.
+The Penpot installation and most data are stored in the database (assets are stored separately depending on configuration). The docker daemon will store that data within the docker directory `/var/lib/docker/volumes/...`. That means your data is saved even if the container crashes, is stopped or deleted.
 
 To make your data persistent to upgrading and get access for backups is using named docker volume or mount a host folder. To achieve this you need one volume for your database container.
 
@@ -56,38 +59,8 @@ $ docker run -d \
 
 ### Auto configuration via environment variables
 
-The following environment variables are also honored for configuring your Penpot instance:
-
-Available at runtime:
-
--   `-e LANG=...` (defaults to `en_US.UTF-8`)
--   `-e LC_ALL=...` (defaults to `C.UTF-8`)
--   `-e Penpot_HTTP_SERVER_PORT=...` (defaults to `6060`)
--   `-e Penpot_HTTP_SERVER_DEBUG=...` (defaults to `false`)
--   `-e Penpot_HTTP_SERVER_CORS=...` (defaults to `http://localhost:3449`)
--   `-e Penpot_DATABASE_USERNAME="..."` (defaults to `penpot`)
--   `-e Penpot_DATABASE_PASSWORD="..."` (defaults to `youshouldoverwritethiswithsomethingelse`)
--   `-e Penpot_DATABASE_URI="..."` (defaults to ` `, will be computed based on other DATABASE parameters if empty)
--   `-e Penpot_DATABASE_NAME="..."` (defaults to `penpot`)
--   `-e Penpot_DATABASE_SERVER="..."` (defaults to `127.0.0.1`)
--   `-e Penpot_DATABASE_PORT=...` (defaults to `5432`)
--   `-e Penpot_MEDIA_DIRECTORY=...` (defaults to `resources/public/media`)
--   `-e Penpot_MEDIA_URI=...` (defaults to `http://localhost:6060/media/`)
--   `-e Penpot_ASSETS_DIRECTORY=...` (defaults to `resources/public/static`)
--   `-e Penpot_ASSETS_URI=...` (defaults to `http://localhost:6060/static/`)
--   `-e Penpot_EMAIL_REPLY_TO="..."` (defaults to `no-reply@penpot.io`)
--   `-e Penpot_EMAIL_FROM="..."` (defaults to `no-reply@penpot.io`)
--   `-e Penpot_SMTP_HOST="..."` (defaults to `127.0.0.1`)
--   `-e Penpot_SMTP_PORT=...` (defaults to `25`)
--   `-e Penpot_SMTP_USER="..."` (defaults to `penpot`)
--   `-e Penpot_SMTP_PASSWORD="..."` (defaults to `youshouldoverwritethiswithsomethingelse`)
--   `-e Penpot_SMTP_SSL=...` (defaults to `false`)
--   `-e Penpot_SMTP_TLS=...` (defaults to `false`)
--   `-e Penpot_SMTP_ENABLED=...` (defaults to `false`)
--   `-e Penpot_REGISTRATION_ENABLED=...` (defaults to `true`)
--   `-e Penpot_SECRET="..."` (defaults to `5qjiAn-QUpawUNqGP10UZKklSqbLKcdGY3sJpq0UUACpVXGg2HOFJCBejDWVHskhRyp7iHb4rjOLXX2ZjF-5cw`)
-
-**Important note:** make sure to use quotation marks for string variables or the backend might try to interpret the values as symbols and have weird issues.
+The backend supports dynamic configuration through environment variables.
+Checkout Penpot documentation to get the list and their behavior: <https://github.com/penpot/penpot/blob/develop/docs/05-Configuration-Guide.md#backend>
 
 ## Questions / Issues
 
