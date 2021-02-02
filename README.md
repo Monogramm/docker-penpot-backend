@@ -69,4 +69,3 @@ If you got any questions or problems using the image, please visit our [Github R
 [uri_license]: http://www.gnu.org/licenses/gpl.html
 
 [uri_license_image]: https://img.shields.io/badge/License-GPL%20v3-blue.svg
-
