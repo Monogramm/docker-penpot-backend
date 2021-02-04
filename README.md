@@ -23,9 +23,25 @@ Penpot is The Open-Source prototyping tool.
 
 <https://hub.docker.com/r/monogramm/docker-penpot-backend/>
 
--   `develop` (`/images/develop/openjdk-11-tools-deps-slim-buster`)
--   `stable` (`/images/main/openjdk-11-tools-deps-slim-buster`)
--   `latest` (`/images/1.0/openjdk-11-tools-deps-slim-buster`)
+<!-- >Docker Tags -->
+
+-   main-jdk-11-slim-buster main  (`images/main/openjdk-11-tools-deps-slim-buster/Dockerfile`)
+
+-   main-jdk-15-alpine  (`images/main/openjdk-16-tools-deps-alpine/Dockerfile`)
+
+-   develop-jdk-11-slim-buster develop  (`images/develop/openjdk-11-tools-deps-slim-buster/Dockerfile`)
+
+-   develop-jdk-15-alpine  (`images/develop/openjdk-16-tools-deps-alpine/Dockerfile`)
+
+-   1.1.0-alpha-jdk-11-slim-buster 1.1-jdk-11-slim-buster 1.1.0-alpha 1.1  (`images/1.1/openjdk-11-tools-deps-slim-buster/Dockerfile`)
+
+-   1.1.0-alpha-jdk-15-alpine 1.1-jdk-15-alpine  (`images/1.1/openjdk-16-tools-deps-alpine/Dockerfile`)
+
+-   1.0.0-alpha-jdk-11-slim-buster 1.0-jdk-11-slim-buster jdk-11-slim-buster 1.0.0-alpha 1.0 latest  (`images/1.0/openjdk-11-tools-deps-slim-buster/Dockerfile`)
+
+-   1.0.0-alpha-jdk-15-alpine 1.0-jdk-15-alpine jdk-15-alpine  (`images/1.0/openjdk-16-tools-deps-alpine/Dockerfile`)
+
+<!-- <Docker Tags -->
 
 <!--
 -   `11-slim-buster`

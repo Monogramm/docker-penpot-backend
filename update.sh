@@ -4,46 +4,46 @@ set -eo pipefail
 declare -A compose=(
 	[openjdk-11-tools-deps-slim-buster]='debian'
 	[openjdk-11-tools-deps-buster]='debian'
-	[openjdk-14-tools-deps-slim-buster]='debian'
-	[openjdk-14-tools-deps-buster]='debian'
-	[openjdk-14-tools-deps-alpine]='alpine'
 	[openjdk-15-tools-deps-slim-buster]='debian'
 	[openjdk-15-tools-deps-buster]='debian'
 	[openjdk-15-tools-deps-alpine]='alpine'
+	[openjdk-16-tools-deps-slim-buster]='debian'
+	[openjdk-16-tools-deps-buster]='debian'
+	[openjdk-16-tools-deps-alpine]='alpine'
 )
 
 declare -A base=(
 	[openjdk-11-tools-deps-slim-buster]='debian'
 	[openjdk-11-tools-deps-buster]='debian'
-	[openjdk-14-tools-deps-slim-buster]='debian'
-	[openjdk-14-tools-deps-buster]='debian'
-	[openjdk-14-tools-deps-alpine]='alpine'
 	[openjdk-15-tools-deps-slim-buster]='debian'
 	[openjdk-15-tools-deps-buster]='debian'
 	[openjdk-15-tools-deps-alpine]='alpine'
+	[openjdk-16-tools-deps-slim-buster]='debian'
+	[openjdk-16-tools-deps-buster]='debian'
+	[openjdk-16-tools-deps-alpine]='alpine'
 )
 
 declare -A dockerVariant=(
 	[openjdk-11-tools-deps-slim-buster]='jdk-11-slim-buster'
 	[openjdk-11-tools-deps-buster]='jdk-11-buster'
-	[openjdk-14-tools-deps-slim-buster]='jdk-14-slim-buster'
-	[openjdk-14-tools-deps-buster]='jdk-14-buster'
-	[openjdk-14-tools-deps-alpine]='jdk-14-alpine'
-	[openjdk-15-tools-deps-slim-buster]='jdk-15-slim-buster'
-	[openjdk-15-tools-deps-buster]='jdk-15-buster'
-	[openjdk-15-tools-deps-alpine]='jdk-15-alpine'
+	[openjdk-15-tools-deps-slim-buster]='jdk-14-slim-buster'
+	[openjdk-15-tools-deps-buster]='jdk-14-buster'
+	[openjdk-15-tools-deps-alpine]='jdk-14-alpine'
+	[openjdk-16-tools-deps-slim-buster]='jdk-15-slim-buster'
+	[openjdk-16-tools-deps-buster]='jdk-15-buster'
+	[openjdk-16-tools-deps-alpine]='jdk-15-alpine'
 )
 
 # Only debian for now, later also 13-alpine
 variants=(
 	openjdk-11-tools-deps-slim-buster
-	openjdk-11-tools-deps-buster
-	openjdk-14-tools-deps-slim-buster
-	openjdk-14-tools-deps-buster
-	openjdk-14-tools-deps-alpine
-	openjdk-15-tools-deps-slim-buster
-	openjdk-15-tools-deps-buster
-	openjdk-15-tools-deps-alpine
+	#openjdk-11-tools-deps-buster
+	#openjdk-15-tools-deps-slim-buster
+	#openjdk-15-tools-deps-buster
+	#openjdk-15-tools-deps-alpine
+	#openjdk-16-tools-deps-slim-buster
+	#openjdk-16-tools-deps-buster
+	openjdk-16-tools-deps-alpine
 )
 
 min_version='1.0'
@@ -72,6 +72,7 @@ rm -rf ./images/
 mkdir ./images/
 
 echo "update docker images"
+readmeTags=
 travisEnv=
 for latest in "${latests[@]}"; do
 	version=$(echo "$latest" | cut -d. -f1-2)
@@ -112,12 +113,18 @@ for latest in "${latests[@]}"; do
 			' "$dir/hooks/run"
 
 			# Create a list of "alias" tags for DockerHub post_push
+			tagVariant=${dockerVariant[$variant]}
 			if [ "$version" = "$dockerLatest" ]; then
-				tagVariant=${dockerVariant[$variant]}
 				if [ "$tagVariant" = "$dockerDefaultVariant" ]; then
 					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant $tagVariant $latest $version latest "
 				else
 					export DOCKER_TAGS="$latest-$tagVariant $version-$tagVariant $tagVariant "
+				fi
+			elif [ "$version" = "$latest" ]; then
+				if [ "$tagVariant" = "$dockerDefaultVariant" ]; then
+					export DOCKER_TAGS="$latest-$tagVariant $latest "
+				else
+					export DOCKER_TAGS="$latest-$tagVariant "
 				fi
 			else
 				if [ "$tagVariant" = "$dockerDefaultVariant" ]; then
@@ -127,6 +134,9 @@ for latest in "${latests[@]}"; do
 				fi
 			fi
 			echo "${DOCKER_TAGS} " > "$dir/.dockertags"
+
+			# Add README tags
+			readmeTags="$readmeTags\n-   ${DOCKER_TAGS} (\`$dir/Dockerfile\`)\n"
 
 			# Add Travis-CI env var
 			travisEnv='\n    - VERSION='"$version"' VARIANT='"$variant$travisEnv"
@@ -140,6 +150,11 @@ for latest in "${latests[@]}"; do
 	fi
 
 done
+
+# update README.md
+sed '/^<!-- >Docker Tags -->/,/^<!-- <Docker Tags -->/{/^<!-- >Docker Tags -->/!{/^<!-- <Docker Tags -->/!d}}' README.md > README.md.tmp
+sed -e "s|<!-- >Docker Tags -->|<!-- >Docker Tags -->\n$readmeTags|g" README.md.tmp > README.md
+rm README.md.tmp
 
 # update .travis.yml
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" && $2 == "#" && $3 == "Environments" { $0 = "env: # Environments'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"
