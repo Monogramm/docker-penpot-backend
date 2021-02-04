@@ -136,7 +136,7 @@ for latest in "${latests[@]}"; do
 			echo "${DOCKER_TAGS} " > "$dir/.dockertags"
 
 			# Add README tags
-			readmeTags="$readmeTags\n-   ${DOCKER_TAGS} (\`$dir/Dockerfile\`)\n"
+			readmeTags="$readmeTags\n-   ${DOCKER_TAGS} (\`$dir/Dockerfile\`)"
 
 			# Add Travis-CI env var
 			travisEnv='\n    - VERSION='"$version"' VARIANT='"$variant$travisEnv"
@@ -153,7 +153,7 @@ done
 
 # update README.md
 sed '/^<!-- >Docker Tags -->/,/^<!-- <Docker Tags -->/{/^<!-- >Docker Tags -->/!{/^<!-- <Docker Tags -->/!d}}' README.md > README.md.tmp
-sed -e "s|<!-- >Docker Tags -->|<!-- >Docker Tags -->\n$readmeTags|g" README.md.tmp > README.md
+sed -e "s|<!-- >Docker Tags -->|<!-- >Docker Tags -->\n$readmeTags\n|g" README.md.tmp > README.md
 rm README.md.tmp
 
 # update .travis.yml
