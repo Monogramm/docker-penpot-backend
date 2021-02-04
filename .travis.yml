@@ -46,8 +46,6 @@ notifications:
   email: false
 
 env: # Environments
-    - VERSION=1.0 VARIANT=openjdk-16-tools-deps-alpine
-    - VERSION=1.0 VARIANT=openjdk-11-tools-deps-slim-buster
     - VERSION=1.1 VARIANT=openjdk-16-tools-deps-alpine
     - VERSION=1.1 VARIANT=openjdk-11-tools-deps-slim-buster
     - VERSION=develop VARIANT=openjdk-16-tools-deps-alpine
