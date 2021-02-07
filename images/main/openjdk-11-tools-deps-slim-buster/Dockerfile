@@ -7,12 +7,11 @@ ADD https://github.com/penpot/penpot/archive/${VERSION}.tar.gz /tmp/penpot.tar.g
 # or copy backend from source and build release
 #COPY . /home/penpot/penpot-${VERSION}/backend
 
+WORKDIR /home/penpot
+
 RUN set -ex; \
-    mkdir -p /home/penpot; \
-    cd /home/penpot; \
     tar -xzf /tmp/penpot.tar.gz --strip=1; \
     rm -f /tmp/penpot.tar.gz;
-
 
 WORKDIR /home/penpot/backend
 
@@ -65,8 +64,8 @@ ENV PENPOT_HTTP_SERVER_PORT=6060 \
     PENPOT_DATABASE_SERVER=127.0.0.1 \
     PENPOT_DATABASE_PORT=5432 \
     PENPOT_SMTP_ENABLED=false \
-    PENPOT_SMTP_DEFAULT_REPLY_TO=no-reply@penpot.io \
-    PENPOT_SMTP_DEFAULT_FROM=no-reply@penpot.io \
+    PENPOT_SMTP_DEFAULT_REPLY_TO=no-reply@penpot.app \
+    PENPOT_SMTP_DEFAULT_FROM=no-reply@penpot.app \
     PENPOT_SMTP_HOST=127.0.0.1 \
     PENPOT_SMTP_PORT=25 \
     PENPOT_SMTP_USER=penpot \
@@ -79,7 +78,7 @@ ENV PENPOT_HTTP_SERVER_PORT=6060 \
 
 # Add penpot as provided by builder and create directories
 COPY --chown=penpot:penpot --from=builder /root/.m2 ~/.m2
-COPY --chown=penpot:penpot --from=builder /home/penpot /home/penpot
+COPY --chown=penpot:penpot --from=builder /home/penpot/backend/target /home/penpot
 
 # Add entrypoint
 COPY --chown=penpot:penpot ./entrypoint.sh /entrypoint.sh
@@ -87,7 +86,7 @@ COPY --chown=penpot:penpot ./entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["sh", "/entrypoint.sh"]
 CMD ["./run.sh"]
 
-WORKDIR /home/penpot/backend/target/dist
+WORKDIR /home/penpot/dist
 
 VOLUME [ "/home/penpot/resources/public", "/opt/data" ]
 
@@ -102,9 +101,17 @@ LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.vcs-url="https://github.com/Monogramm/docker-penpot-backend" \
     org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.name="PENPOT (backend) - The Open-Source prototyping tool" \
+    org.label-schema.name="Penpot (backend) - The Open-Source prototyping tool" \
     org.label-schema.description="The open-source solution for design and prototyping" \
     org.label-schema.url="https://www.penpot.app/" \
-    org.label-schema.vendor="PENPOT" \
+    org.label-schema.vendor="Penpot" \
     org.label-schema.version=$VERSION \
-    org.label-schema.schema-version="1.0"
+    org.label-schema.schema-version="1.0" \
+    org.opencontainers.image.source="https://github.com/Monogramm/docker-penpot-backend" \
+    org.opencontainers.image.created=$BUILD_DATE \
+    org.opencontainers.image.title="Penpot (backend) - The Open-Source prototyping tool" \
+    org.opencontainers.image.description="The open-source solution for design and prototyping" \
+    org.opencontainers.image.url="https://www.penpot.app/" \
+    org.opencontainers.image.vendor="Penpot" \
+    org.opencontainers.image.version=$VERSION \
+    org.opencontainers.image.authors="Monogramm maintainers <opensource at monogramm dot io>"
