@@ -4,9 +4,6 @@ set -eo pipefail
 declare -A compose=(
 	[openjdk-11-tools-deps-slim-buster]='debian'
 	[openjdk-11-tools-deps-buster]='debian'
-	[openjdk-15-tools-deps-slim-buster]='debian'
-	[openjdk-15-tools-deps-buster]='debian'
-	[openjdk-15-tools-deps-alpine]='alpine'
 	[openjdk-16-tools-deps-slim-buster]='debian'
 	[openjdk-16-tools-deps-buster]='debian'
 	[openjdk-16-tools-deps-alpine]='alpine'
@@ -15,9 +12,6 @@ declare -A compose=(
 declare -A base=(
 	[openjdk-11-tools-deps-slim-buster]='debian'
 	[openjdk-11-tools-deps-buster]='debian'
-	[openjdk-15-tools-deps-slim-buster]='debian'
-	[openjdk-15-tools-deps-buster]='debian'
-	[openjdk-15-tools-deps-alpine]='alpine'
 	[openjdk-16-tools-deps-slim-buster]='debian'
 	[openjdk-16-tools-deps-buster]='debian'
 	[openjdk-16-tools-deps-alpine]='alpine'
@@ -26,21 +20,15 @@ declare -A base=(
 declare -A dockerVariant=(
 	[openjdk-11-tools-deps-slim-buster]='jdk-11-slim-buster'
 	[openjdk-11-tools-deps-buster]='jdk-11-buster'
-	[openjdk-15-tools-deps-slim-buster]='jdk-14-slim-buster'
-	[openjdk-15-tools-deps-buster]='jdk-14-buster'
-	[openjdk-15-tools-deps-alpine]='jdk-14-alpine'
-	[openjdk-16-tools-deps-slim-buster]='jdk-15-slim-buster'
-	[openjdk-16-tools-deps-buster]='jdk-15-buster'
-	[openjdk-16-tools-deps-alpine]='jdk-15-alpine'
+	[openjdk-16-tools-deps-slim-buster]='jdk-16-slim-buster'
+	[openjdk-16-tools-deps-buster]='jdk-16-buster'
+	[openjdk-16-tools-deps-alpine]='jdk-16-alpine'
 )
 
-# Only debian for now, later also 13-alpine
+# Only debian for now, later also alpine
 variants=(
 	openjdk-11-tools-deps-slim-buster
 	#openjdk-11-tools-deps-buster
-	#openjdk-15-tools-deps-slim-buster
-	#openjdk-15-tools-deps-buster
-	#openjdk-15-tools-deps-alpine
 	#openjdk-16-tools-deps-slim-buster
 	#openjdk-16-tools-deps-buster
 	openjdk-16-tools-deps-alpine

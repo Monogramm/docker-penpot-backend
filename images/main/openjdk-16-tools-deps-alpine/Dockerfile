@@ -54,9 +54,7 @@ RUN set -ex; \
         --disabled-password \
         -u "$EXTERNAL_UID" \
         -D penpot \
-    ; \
-    echo "penpot ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/penpot; \
-    chmod 0440 /etc/sudoers.d/penpot
+    ;
 
 USER penpot
 

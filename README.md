@@ -26,26 +26,18 @@ Penpot is The Open-Source prototyping tool.
 <!-- >Docker Tags -->
 
 -   main-jdk-11-slim-buster main  (`images/main/openjdk-11-tools-deps-slim-buster/Dockerfile`)
--   main-jdk-15-alpine  (`images/main/openjdk-16-tools-deps-alpine/Dockerfile`)
+-   main-jdk-16-alpine  (`images/main/openjdk-16-tools-deps-alpine/Dockerfile`)
 -   develop-jdk-11-slim-buster develop  (`images/develop/openjdk-11-tools-deps-slim-buster/Dockerfile`)
--   develop-jdk-15-alpine  (`images/develop/openjdk-16-tools-deps-alpine/Dockerfile`)
+-   develop-jdk-16-alpine  (`images/develop/openjdk-16-tools-deps-alpine/Dockerfile`)
 -   1.1.0-alpha-jdk-11-slim-buster 1.1-jdk-11-slim-buster jdk-11-slim-buster 1.1.0-alpha 1.1 latest  (`images/1.1/openjdk-11-tools-deps-slim-buster/Dockerfile`)
--   1.1.0-alpha-jdk-15-alpine 1.1-jdk-15-alpine jdk-15-alpine  (`images/1.1/openjdk-16-tools-deps-alpine/Dockerfile`)
+-   1.1.0-alpha-jdk-16-alpine 1.1-jdk-16-alpine jdk-16-alpine  (`images/1.1/openjdk-16-tools-deps-alpine/Dockerfile`)
 
 <!-- <Docker Tags -->
 
-<!--
--   `11-slim-buster`
--   `11-buster`
--   `14-slim-buster`
--   `14-buster`
--   `14-alpine`
--   `15-slim-buster`
--   `15-buster`
--   `15-alpine`
--->
+## How to run this image
 
-## How to run this image ?
+You can use the example `docker-compose.yml` at the root of the project to start a local Penpot instance.
+Feel free to update the content of `.env` to your needs.
 
 ### Persistent data
 
