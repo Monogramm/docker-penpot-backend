@@ -1,6 +1,6 @@
 FROM monogramm/docker-penpot-builder:develop as builder
 
-ARG VERSION=%%VERSION%%
+ARG VERSION=develop
 
 # Download source from github
 ADD https://github.com/penpot/penpot/archive/${VERSION}.tar.gz /tmp/penpot.tar.gz
@@ -23,7 +23,7 @@ RUN set -ex; \
 
 
 # Once application has been built, prepare production image
-FROM clojure:%%VARIANT%%
+FROM clojure:openjdk-16-tools-deps-alpine
 
 ENV GLIBC_VERSION=2.31-r0 \
     LANG=en_US.UTF-8 \
@@ -98,7 +98,7 @@ VOLUME [ "/home/penpot/resources/public", "/opt/data" ]
 
 EXPOSE 6060
 
-ARG VERSION=%%VERSION%%
+ARG VERSION=develop
 ARG VCS_REF
 ARG BUILD_DATE
 
