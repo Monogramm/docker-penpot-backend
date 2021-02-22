@@ -1,6 +1,6 @@
 FROM monogramm/docker-penpot-builder:develop as builder
 
-ARG VERSION=1.1.0-alpha
+ARG VERSION=1.2.0-alpha
 
 # Download source from github
 ADD https://github.com/penpot/penpot/archive/${VERSION}.tar.gz /tmp/penpot.tar.gz
@@ -23,38 +23,34 @@ RUN set -ex; \
 
 
 # Once application has been built, prepare production image
-FROM clojure:openjdk-16-tools-deps-alpine
+FROM clojure:openjdk-11-tools-deps-slim-buster
 
-ENV GLIBC_VERSION=2.31-r0 \
-    LANG=en_US.UTF-8 \
+ENV LANG=en_US.UTF-8 \
     LC_ALL=C.UTF-8
 
 # Add dependencies needed by penpot
 RUN set -ex; \
-    apk update; \
-    apk add --no-cache \
-        bash \
+    apt-get update -yq;  \
+    apt-get install -yq \
         curl \
-        gnupg \
+        gnupg2 \
         imagemagick \
-        libwebp \
         rsync \
+        webp \
     ; \
-    rm -rf /var/cache/apk/*; \
-    wget "https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk"; \
-    apk add --no-cache --allow-untrusted "glibc-${GLIBC_VERSION}.apk"; \
-    rm "glibc-${GLIBC_VERSION}.apk"
+    rm -rf /var/lib/apt/lists/*
 
 
 ARG EXTERNAL_UID=1000
 
 # add new user
 RUN set -ex; \
-    adduser \
-        --disabled-password \
+    useradd \
         -u "$EXTERNAL_UID" \
-        -D penpot \
-    ;
+        -U \
+        penpot \
+    ; \
+    usermod -aG sudo penpot
 
 USER penpot
 
@@ -96,7 +92,7 @@ VOLUME [ "/home/penpot/resources/public", "/opt/data" ]
 
 EXPOSE 6060
 
-ARG VERSION=1.1.0-alpha
+ARG VERSION=1.2.0-alpha
 ARG VCS_REF
 ARG BUILD_DATE
 
@@ -105,10 +101,10 @@ LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.vcs-url="https://github.com/Monogramm/docker-penpot-backend" \
     org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.name="PENPOT (backend) - The Open-Source prototyping tool" \
+    org.label-schema.name="Penpot (backend) - The Open-Source prototyping tool" \
     org.label-schema.description="The open-source solution for design and prototyping" \
     org.label-schema.url="https://www.penpot.app/" \
-    org.label-schema.vendor="PENPOT" \
+    org.label-schema.vendor="Penpot" \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0" \
     org.opencontainers.image.source="https://github.com/Monogramm/docker-penpot-backend" \

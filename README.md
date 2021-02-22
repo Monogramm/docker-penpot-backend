@@ -29,8 +29,8 @@ Penpot is The Open-Source prototyping tool.
 -   main-jdk-16-alpine  (`images/main/openjdk-16-tools-deps-alpine/Dockerfile`)
 -   develop-jdk-11-slim-buster develop  (`images/develop/openjdk-11-tools-deps-slim-buster/Dockerfile`)
 -   develop-jdk-16-alpine  (`images/develop/openjdk-16-tools-deps-alpine/Dockerfile`)
--   1.1.0-alpha-jdk-11-slim-buster 1.1-jdk-11-slim-buster jdk-11-slim-buster 1.1.0-alpha 1.1 latest  (`images/1.1/openjdk-11-tools-deps-slim-buster/Dockerfile`)
--   1.1.0-alpha-jdk-16-alpine 1.1-jdk-16-alpine jdk-16-alpine  (`images/1.1/openjdk-16-tools-deps-alpine/Dockerfile`)
+-   1.2.0-alpha-jdk-11-slim-buster 1.2-jdk-11-slim-buster jdk-11-slim-buster 1.2.0-alpha 1.2 latest  (`images/1.2/openjdk-11-tools-deps-slim-buster/Dockerfile`)
+-   1.2.0-alpha-jdk-16-alpine 1.2-jdk-16-alpine jdk-16-alpine  (`images/1.2/openjdk-16-tools-deps-alpine/Dockerfile`)
 
 <!-- <Docker Tags -->
 
