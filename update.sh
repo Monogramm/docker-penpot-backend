@@ -34,8 +34,8 @@ variants=(
 	openjdk-16-tools-deps-alpine
 )
 
-min_version='1.2'
-dockerLatest='1.2'
+min_version='1.3'
+dockerLatest='1.3'
 dockerDefaultVariant='jdk-11-slim-buster'
 
 

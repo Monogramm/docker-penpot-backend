@@ -1,6 +1,6 @@
 FROM monogramm/docker-penpot-builder:develop as builder
 
-ARG VERSION=1.2.0-alpha
+ARG VERSION=1.3.0-alpha
 
 # Download source from github
 ADD https://github.com/penpot/penpot/archive/${VERSION}.tar.gz /tmp/penpot.tar.gz
@@ -96,7 +96,7 @@ VOLUME [ "/home/penpot/resources/public", "/opt/data" ]
 
 EXPOSE 6060
 
-ARG VERSION=1.2.0-alpha
+ARG VERSION=1.3.0-alpha
 ARG VCS_REF
 ARG BUILD_DATE
 
