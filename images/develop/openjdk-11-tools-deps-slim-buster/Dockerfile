@@ -52,8 +52,6 @@ RUN set -ex; \
     ; \
     usermod -aG sudo penpot
 
-USER penpot
-
 ENV PENPOT_HTTP_SERVER_PORT=6060 \
     PENPOT_HTTP_SERVER_DEBUG=false \
     PENPOT_PUBLIC_URI=http://localhost/ \
@@ -96,7 +94,11 @@ ARG VERSION=develop
 ARG VCS_REF
 ARG BUILD_DATE
 
-ENV PENPOT_VERSION=$VERSION
+# Keep track of image version
+RUN set -ex; \
+    sed -i -re "s/\%version\%/$VERSION/g" ./main/app/config.clj;
+
+USER penpot
 
 LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     version=$VERSION \
