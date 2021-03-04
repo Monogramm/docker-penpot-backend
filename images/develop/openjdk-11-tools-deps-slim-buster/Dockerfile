@@ -1,11 +1,11 @@
 FROM monogramm/docker-penpot-builder:develop as builder
 
-ARG VERSION=develop
+ARG PENPOT_VERSION=develop
 
 # Download source from github
-ADD https://github.com/penpot/penpot/archive/${VERSION}.tar.gz /tmp/penpot.tar.gz
+ADD https://github.com/penpot/penpot/archive/${PENPOT_VERSION}.tar.gz /tmp/penpot.tar.gz
 # or copy backend from source and build release
-#COPY . /home/penpot/penpot-${VERSION}/backend
+#COPY . /home/penpot/penpot-${PENPOT_VERSION}/backend
 
 WORKDIR /home/penpot
 
@@ -95,6 +95,8 @@ EXPOSE 6060
 ARG VERSION=develop
 ARG VCS_REF
 ARG BUILD_DATE
+
+ENV PENPOT_VERSION=$VERSION
 
 LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     version=$VERSION \
