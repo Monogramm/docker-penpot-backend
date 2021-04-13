@@ -2,6 +2,10 @@ FROM monogramm/docker-penpot-builder:develop as builder
 # TODO Use official devenv as builder
 #FROM penpotapp/devenv:latest as builder
 
+ENV BABASHKA_VERSION=0.3.2 \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
 # Install babashka
 RUN set -ex; \
     cd /tmp; \
