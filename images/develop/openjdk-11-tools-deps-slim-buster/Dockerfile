@@ -32,7 +32,7 @@ WORKDIR /home/penpot/backend
 # Fetch dependencies (cache them on this step) and build
 RUN set -ex; \
     clojure -Stree; \
-    ./scripts/build; \
+    ./scripts/build "${PENPOT_VERSION}"; \
     ls -al ./target/dist
 
 
@@ -107,10 +107,6 @@ EXPOSE 6060
 ARG VERSION=develop
 ARG VCS_REF
 ARG BUILD_DATE
-
-# Keep track of image version
-RUN set -ex; \
-    sed -i -re "s/\%version\%/$VERSION/g" ./main/app/config.clj;
 
 USER penpot
 
