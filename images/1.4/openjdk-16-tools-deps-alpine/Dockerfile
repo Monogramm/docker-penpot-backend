@@ -1,4 +1,14 @@
 FROM monogramm/docker-penpot-builder:develop as builder
+# TODO Use official devenv as builder
+#FROM penpotapp/devenv:latest as builder
+
+# Install babashka
+RUN set -ex; \
+    cd /tmp; \
+    curl -LfsSo /tmp/babashka.tar.gz https://github.com/babashka/babashka/releases/download/v$BABASHKA_VERSION/babashka-$BABASHKA_VERSION-linux-amd64.tar.gz; \
+    cd /usr/local/bin; \
+    tar -xf /tmp/babashka.tar.gz; \
+    rm -rf /tmp/babashka.tar.gz;
 
 ARG PENPOT_VERSION=1.4.0-alpha
 
@@ -18,7 +28,7 @@ WORKDIR /home/penpot/backend
 # Fetch dependencies (cache them on this step) and build
 RUN set -ex; \
     clojure -Stree; \
-    ./scripts/build.sh; \
+    ./scripts/build; \
     ls -al ./target/dist
 
 
