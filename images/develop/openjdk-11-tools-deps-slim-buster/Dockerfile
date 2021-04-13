@@ -1,4 +1,18 @@
 FROM monogramm/docker-penpot-builder:develop as builder
+# TODO Use official devenv as builder
+#FROM penpotapp/devenv:latest as builder
+
+ENV BABASHKA_VERSION=0.3.2 \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+# Install babashka
+RUN set -ex; \
+    cd /tmp; \
+    curl -LfsSo /tmp/babashka.tar.gz https://github.com/babashka/babashka/releases/download/v$BABASHKA_VERSION/babashka-$BABASHKA_VERSION-linux-amd64.tar.gz; \
+    cd /usr/local/bin; \
+    tar -xf /tmp/babashka.tar.gz; \
+    rm -rf /tmp/babashka.tar.gz;
 
 ARG PENPOT_VERSION=develop
 
@@ -18,7 +32,7 @@ WORKDIR /home/penpot/backend
 # Fetch dependencies (cache them on this step) and build
 RUN set -ex; \
     clojure -Stree; \
-    ./scripts/build.sh; \
+    ./scripts/build "${PENPOT_VERSION}"; \
     ls -al ./target/dist
 
 
@@ -93,10 +107,6 @@ EXPOSE 6060
 ARG VERSION=develop
 ARG VCS_REF
 ARG BUILD_DATE
-
-# Keep track of image version
-RUN set -ex; \
-    sed -i -re "s/\%version\%/$VERSION/g" ./main/app/config.clj;
 
 USER penpot
 

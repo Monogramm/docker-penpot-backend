@@ -1,4 +1,18 @@
 FROM monogramm/docker-penpot-builder:develop as builder
+# TODO Use official devenv as builder
+#FROM penpotapp/devenv:latest as builder
+
+ENV BABASHKA_VERSION=0.3.2 \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+# Install babashka
+RUN set -ex; \
+    cd /tmp; \
+    curl -LfsSo /tmp/babashka.tar.gz https://github.com/babashka/babashka/releases/download/v$BABASHKA_VERSION/babashka-$BABASHKA_VERSION-linux-amd64.tar.gz; \
+    cd /usr/local/bin; \
+    tar -xf /tmp/babashka.tar.gz; \
+    rm -rf /tmp/babashka.tar.gz;
 
 ARG PENPOT_VERSION=main
 
@@ -18,7 +32,7 @@ WORKDIR /home/penpot/backend
 # Fetch dependencies (cache them on this step) and build
 RUN set -ex; \
     clojure -Stree; \
-    ./scripts/build.sh; \
+    ./scripts/build "${PENPOT_VERSION}"; \
     ls -al ./target/dist
 
 
@@ -98,10 +112,6 @@ ARG VERSION=main
 ARG VCS_REF
 ARG BUILD_DATE
 
-# Keep track of image version
-RUN set -ex; \
-    sed -i -re "s/\%version\%/$VERSION/g" ./main/app/config.clj;
-
 USER penpot
 
 LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
@@ -109,10 +119,10 @@ LABEL maintainer="Monogramm Maintainers <opensource at monogramm dot io>" \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.vcs-url="https://github.com/Monogramm/docker-penpot-backend" \
     org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.name="PENPOT (backend) - The Open-Source prototyping tool" \
+    org.label-schema.name="Penpot (backend) - The Open-Source prototyping tool" \
     org.label-schema.description="The open-source solution for design and prototyping" \
     org.label-schema.url="https://www.penpot.app/" \
-    org.label-schema.vendor="PENPOT" \
+    org.label-schema.vendor="Penpot" \
     org.label-schema.version=$VERSION \
     org.label-schema.schema-version="1.0" \
     org.opencontainers.image.source="https://github.com/Monogramm/docker-penpot-backend" \
