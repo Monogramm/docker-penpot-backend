@@ -34,8 +34,8 @@ variants=(
 	openjdk-16-tools-deps-alpine
 )
 
-min_version='1.4'
-dockerLatest='1.4'
+min_version='1.5'
+dockerLatest='1.5'
 dockerDefaultVariant='jdk-11-slim-buster'
 
 
@@ -61,6 +61,7 @@ mkdir ./images/
 
 echo "update docker images"
 readmeTags=
+githubEnv=
 travisEnv=
 for latest in "${latests[@]}"; do
 	version=$(echo "$latest" | cut -d. -f1-2)
@@ -135,6 +136,10 @@ for latest in "${latests[@]}"; do
 				docker build -t "${dockerRepo}:${tag}" "$dir"
 			fi
 		done
+
+		# Add GitHub Actions env var
+		githubEnv="'$version', $githubEnv"
+
 	fi
 
 done
@@ -143,6 +148,9 @@ done
 sed '/^<!-- >Docker Tags -->/,/^<!-- <Docker Tags -->/{/^<!-- >Docker Tags -->/!{/^<!-- <Docker Tags -->/!d}}' README.md > README.md.tmp
 sed -e "s|<!-- >Docker Tags -->|<!-- >Docker Tags -->\n$readmeTags\n|g" README.md.tmp > README.md
 rm README.md.tmp
+
+# update .github workflows
+sed -i -e "s|version: \[.*\]|version: [${githubEnv}]|g" .github/workflows/hooks.yml
 
 # update .travis.yml
 travis="$(awk -v 'RS=\n\n' '$1 == "env:" && $2 == "#" && $3 == "Environments" { $0 = "env: # Environments'"$travisEnv"'" } { printf "%s%s", $0, RS }' .travis.yml)"

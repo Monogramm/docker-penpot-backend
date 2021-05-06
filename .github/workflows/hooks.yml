@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ['1.4', 'main', 'develop']
+        version: ['1.5', 'develop', 'main', ]
         variant: ['openjdk-11-tools-deps-slim-buster']
         # variant: [openjdk-15-tools-deps-alpine, openjdk-15-tools-deps-buster,
         #           openjdk-15-tools-deps-slim-buster, openjdk-14-tools-deps-alpine,
