@@ -14,7 +14,7 @@ RUN set -ex; \
     tar -xf /tmp/babashka.tar.gz; \
     rm -rf /tmp/babashka.tar.gz;
 
-ARG PENPOT_VERSION=1.5.4-alpha
+ARG PENPOT_VERSION=1.6.1-alpha
 
 # Download source from github
 ADD https://github.com/penpot/penpot/archive/${PENPOT_VERSION}.tar.gz /tmp/penpot.tar.gz
@@ -37,34 +37,38 @@ RUN set -ex; \
 
 
 # Once application has been built, prepare production image
-FROM clojure:openjdk-11-tools-deps-slim-buster
+FROM clojure:openjdk-16-tools-deps-alpine
 
-ENV LANG=en_US.UTF-8 \
+ENV GLIBC_VERSION=2.31-r0 \
+    LANG=en_US.UTF-8 \
     LC_ALL=C.UTF-8
 
 # Add dependencies needed by penpot
 RUN set -ex; \
-    apt-get update -yq;  \
-    apt-get install -yq \
+    apk update; \
+    apk add --no-cache \
+        bash \
         curl \
-        gnupg2 \
+        gnupg \
         imagemagick \
+        libwebp \
         rsync \
-        webp \
     ; \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/cache/apk/*; \
+    wget "https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk"; \
+    apk add --no-cache --allow-untrusted "glibc-${GLIBC_VERSION}.apk"; \
+    rm "glibc-${GLIBC_VERSION}.apk"
 
 
 ARG EXTERNAL_UID=1000
 
 # add new user
 RUN set -ex; \
-    useradd \
+    adduser \
+        --disabled-password \
         -u "$EXTERNAL_UID" \
-        -U \
-        penpot \
-    ; \
-    usermod -aG sudo penpot
+        -D penpot \
+    ;
 
 ENV PENPOT_HTTP_SERVER_PORT=6060 \
     PENPOT_HTTP_SERVER_DEBUG=false \
@@ -104,7 +108,7 @@ VOLUME [ "/home/penpot/resources/public", "/opt/data" ]
 
 EXPOSE 6060
 
-ARG VERSION=1.5.4-alpha
+ARG VERSION=1.6.1-alpha
 ARG VCS_REF
 ARG BUILD_DATE
 
