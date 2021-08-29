@@ -14,7 +14,7 @@ RUN set -ex; \
     tar -xf /tmp/babashka.tar.gz; \
     rm -rf /tmp/babashka.tar.gz;
 
-ARG PENPOT_VERSION=1.6.5-alpha
+ARG PENPOT_VERSION=1.7.4-alpha
 
 # Download source from github
 ADD https://github.com/penpot/penpot/archive/${PENPOT_VERSION}.tar.gz /tmp/penpot.tar.gz
@@ -108,7 +108,7 @@ VOLUME [ "/home/penpot/resources/public", "/opt/data" ]
 
 EXPOSE 6060
 
-ARG VERSION=1.6.5-alpha
+ARG VERSION=1.7.4-alpha
 ARG VCS_REF
 ARG BUILD_DATE
 
